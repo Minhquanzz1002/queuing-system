@@ -13,16 +13,14 @@
     "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "webpack --mode=production --node-env=production",
+    "start": "serve -s dist",
+    "build": "npm run clean && npm run && webpack --mode production",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "npm run && webpack-dev-server --mode development",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
+    "prepare": "husky",
     "clean": "rimraf dist",
-    "watch": "webpack --watch",
-    "serve": "webpack serve"
+    "lint-staged": "npx eslint --ext=ts,tsx ./src"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +44,8 @@
     "@babel/plugin-transform-object-rest-spread": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@eslint/js": "^9.10.0",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^8.6.0",
@@ -60,6 +60,8 @@
     "eslint-plugin-react": "^7.36.1",
     "globals": "^15.9.0",
     "html-webpack-plugin": "^5.6.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "mini-css-extract-plugin": "^2.9.1",
     "postcss": "^8.4.47",
     "postcss-loader": "^8.1.1",
@@ -67,6 +69,7 @@
     "rimraf": "^6.0.1",
     "sass": "^1.79.1",
     "sass-loader": "^16.0.1",
+    "serve": "^14.2.3",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
