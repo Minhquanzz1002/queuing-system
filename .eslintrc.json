@@ -1,3 +1,28 @@
 {
-  "plugins": ["react", "@typescript-eslint"]
+  "extends": [
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["react", "@typescript-eslint"],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"    // cho phép dùng import/export
+  },
+  "rules": {
+    "no-shadow-restricted-names": "error",  // Không được phép dùng các tên bị cấm như: array
+    "no-undef": "warn",       // Ngăn không cho sử dụng biến chưa được định nghĩa
+    "no-use-before-define": "error",  // Ngăn việc gọi trước khi định nghĩa
+    "no-unused-vars": "warn", // Cảnh báo khi có biến không sử dụng
+    "semi": "warn",           // Cảnh báo khi không có dấu ; cuối dòng lệnh
+    "space-infix-ops": "error"  // Phải tuân thủ quy tắc. Ex: const a = 1 + 2 thay vì const a=1+2
+
+  }
 }
