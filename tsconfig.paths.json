@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@view/*": ["src/view/*"]
+    }
+  }
+}
