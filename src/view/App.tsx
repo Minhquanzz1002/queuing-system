@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from '../shared/assets/images/logo.svg';
+import React, {memo} from 'react';
+import "@styles/styles.scss";
+import {PublicPage} from "@routers/component/PublicPage";
+import {ConfigProvider} from "antd";
+
+const MainView = memo(() => {
+    return (
+        <>
+            <PublicPage/>
+            {/*<PrivatePage/>*/}
+        </>
+    );
+});
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    return (
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: "#FF9138",
+                    fontFamily: "Nunito, sans-serif"
+                }
+            }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+            <MainView/>
+        </ConfigProvider>
+    );
 }
 
 export default App;
