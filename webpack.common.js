@@ -41,7 +41,7 @@ module.exports = {
                 type: 'asset/resource',
             },
             {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                test: /\.(eot|ttf|woff|woff2)$/i,
                 type: 'asset/resource',
                 generator: {
                     filename: 'asset/[hash][ext][query]'

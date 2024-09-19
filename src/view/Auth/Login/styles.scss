@@ -1,0 +1,71 @@
+@import "../../styles/variable";
+@import "../../styles/mixin";
+
+.login {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+
+  &__left {
+    background-color: #F6F6F6;
+    flex-grow: 1;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__form {
+    margin-top: 7.5rem;
+    width: 40rem;
+  }
+
+  &__logo {
+    margin-top: 8rem;
+  }
+
+  &__right {
+    width: 84.8rem;
+
+    @include for-size(md, down) {
+      display: none;
+    }
+  }
+
+  &__background {
+    position: relative;
+    margin: {
+      left: 8rem;
+      top: 11.2rem;
+    };
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  &__brandname {
+    position: absolute;
+    top: 30rem;
+    left: 37.5rem;
+    color: $orange500;
+
+    h1 {
+      font: {
+        size: 3.6rem;
+        weight: 900;
+      }
+      text-wrap: nowrap;
+      line-height: 5.4rem;
+    }
+
+    h2 {
+      text-wrap: nowrap;
+      font: {
+        size: 3.4rem;
+        weight: 400;
+      }
+      line-height: 5.4rem;
+    }
+  }
+}
