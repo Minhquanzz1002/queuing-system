@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
     "paths": {
-      "@view/*": ["src/view/*"]
+      "@config/*": ["src/config/*"],
+      "@view/*": ["src/view/*"],
+      "@routers/*": ["src/routers/*"],
+      "@shared/*": ["src/shared/*"],
+      "@assets/*": ["src/shared/assets/*"],
+      "@styles/*": ["src/view/styles/*"],
+      "@layout/*": ["src/layout/*"]
     }
   }
 }

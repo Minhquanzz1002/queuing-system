@@ -22,7 +22,8 @@
     "no-use-before-define": "error",  // Ngăn việc gọi trước khi định nghĩa
     "no-unused-vars": "warn", // Cảnh báo khi có biến không sử dụng
     "semi": "warn",           // Cảnh báo khi không có dấu ; cuối dòng lệnh
-    "space-infix-ops": "error"  // Phải tuân thủ quy tắc. Ex: const a = 1 + 2 thay vì const a=1+2
-
+    "space-infix-ops": "error",  // Phải tuân thủ quy tắc. Ex: const a = 1 + 2 thay vì const a=1+2
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-var-requires": "off"
   }
 }
