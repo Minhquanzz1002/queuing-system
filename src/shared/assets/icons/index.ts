@@ -1,1 +1,12 @@
+export {default as IconAsterisk} from './AsteriskIcon';
+export {default as IconBell} from './BellIcon';
+export {default as IconCalendarDays} from './CalendarDaysIcon';
+export {default as IconChat} from './ChatIcon';
+export {default as IconChevronRight} from './ChevronRightIcon';
+export {default as IconCircle} from './CircleIcon';
+export {default as IconDocumentReport} from './DocumentReportIcon';
 export {default as IconElement} from './ElementIcon';
+export {default as IconLayer} from './LayerIcon';
+export {default as IconMonitor} from './MonitorIcon';
+export {default as IconSetting} from './SettingIcon';
+export {default as IconSquarePlus} from './SquarePlusIcon';

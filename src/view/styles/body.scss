@@ -1,3 +1,4 @@
+@import "variable";
 //---------------------------
 //      RESET CSS           |
 //---------------------------
@@ -55,6 +56,13 @@ h1, h2, h3, h4, h5, h6 {
 @font-face {
   font-family: 'Nunito';
   font-style: normal;
+  font-weight: 600;
+  src: local("Nunito"), url("../../shared/assets/font/Nunito/Nunito-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
   font-weight: 700;
   src: local("Nunito"), url("../../shared/assets/font/Nunito/Nunito-Bold.ttf") format("truetype");
 }
@@ -64,4 +72,43 @@ h1, h2, h3, h4, h5, h6 {
   font-style: normal;
   font-weight: 900;
   src: local("Nunito"), url("../../shared/assets/font/Nunito/Nunito-ExtraBold.ttf") format("truetype");
+}
+//---------------------------
+//      CUSTOM ANTD          |
+//---------------------------
+/* Menu */
+.ant-menu-item, .ant-menu-submenu-title {
+  font-size: 1.6rem !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Breadcrumb */
+.ant-breadcrumb {
+  .ant-breadcrumb-link {
+    font: {
+      size: 2rem;
+      weight: 700;
+    };
+  }
+}
+
+.ant-breadcrumb-separator {
+  display: flex;
+  align-items: center;
+}
+
+/* Pagination */
+.ant-pagination-item-active {
+  a {
+    color: white !important;
+  }
+}
+
+//---------------------------
+//      UTILS           |
+//---------------------------
+.bg-orange-50 {
+  background-color: $orange50;
 }
