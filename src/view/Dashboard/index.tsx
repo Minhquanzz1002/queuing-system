@@ -1,9 +1,12 @@
 import React from 'react';
+import {Breadcrumb} from "antd";
 
 const Dashboard = () => {
     return (
         <div>
-            dashboard
+            <Breadcrumb
+                items={[{title: 'Dashboard'}]}
+            />
         </div>
     );
 };

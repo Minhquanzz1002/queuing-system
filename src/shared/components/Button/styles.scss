@@ -1,0 +1,25 @@
+@import "../../../view/styles/variable";
+
+.action-button {
+  position: fixed;
+  right: 0;
+  top: 30%;
+  background-color: $orange50;
+  padding: 1.2rem 0.4rem;
+  border-radius: 0.8rem 0 0 0.8rem;
+  box-shadow: 0 0 0.6rem 0 #E7E9F2;
+  width: 8rem;
+  height: 9.2rem;
+
+  &__content {
+    color: $orange500;
+  }
+
+  &__text {
+    text-align: center;
+    font: {
+      size: 1.4rem;
+      weight: 600;
+    };
+  }
+}
