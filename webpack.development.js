@@ -17,7 +17,7 @@ const devServer = {
     },
     watchFiles: ['src/**/*.(tsx|ts|scss|png|jpg)', 'public/**/*'],
     hot: true
-}
+};
 
 const config = {
     mode: "development",
@@ -25,8 +25,9 @@ const config = {
     devServer,
     plugins: [
         new Dotenv({path: './.env.development'}),
+        new Dotenv({path: './.env'}),
         new webpack.HotModuleReplacementPlugin(),
     ],
-}
+};
 
 module.exports = merge(common, config);

@@ -1,0 +1,36 @@
+.ant-table-content {
+  .ant-table-thead {
+    .ant-table-cell:first-of-type {
+      padding-left: 1.6rem !important;
+    }
+
+    .ant-table-cell {
+      font: {
+        size: 1.6rem;
+      };
+      padding: {
+        top: 1.2rem !important;
+        bottom: 1.2rem !important;
+        left: 0.8rem !important;
+        right: 0.8rem !important;
+      };
+    }
+  }
+
+  .ant-table-tbody {
+    .ant-table-row {
+      &:last-of-type {
+
+      }
+
+      .ant-table-cell {
+        padding: {
+          top: 1.2rem !important;
+          bottom: 1.2rem !important;
+          left: 0.8rem !important;
+          right: 0.8rem !important;
+        };
+      }
+    }
+  }
+}

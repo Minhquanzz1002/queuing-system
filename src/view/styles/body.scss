@@ -1,4 +1,5 @@
 @import "variable";
+@import "./layout-admin-style/styles-index";
 //---------------------------
 //      RESET CSS           |
 //---------------------------
@@ -30,6 +31,14 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-size: inherit;
   font-weight: inherit;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: Nunito, sans-serif;
 }
 
 @font-face {
@@ -84,19 +93,10 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center !important;
 }
 
-/* Breadcrumb */
-.ant-breadcrumb {
-  .ant-breadcrumb-link {
-    font: {
-      size: 2rem;
-      weight: 700;
-    };
+.ant-menu-submenu-selected {
+  .ant-menu-submenu-title {
+    background: $orange500;
   }
-}
-
-.ant-breadcrumb-separator {
-  display: flex;
-  align-items: center;
 }
 
 /* Pagination */
@@ -106,9 +106,44 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Form */
+.ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+  display: none;
+}
+
+.ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
+  display: inline-block;
+  margin-inline-end: 4px;
+  color: #ff4d4f;
+  font-size: 14px;
+  font-family: SimSun, sans-serif;
+  line-height: 1;
+  content: "*";
+}
+
+.ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-form-item-label >label::after, :where(.css-dev-only-do-not-override-1l9851f).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-24.ant-form-item-label >label::after, :where(.css-dev-only-do-not-override-1l9851f).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-xl-24.ant-form-item-label >label::after {
+  visibility: visible;
+}
+
+[class*=" ant-form"] {
+  font-weight: 600;
+}
+
 //---------------------------
 //      UTILS           |
 //---------------------------
+.h-100 {
+  height: 100%;
+}
+
+.h-100vh {
+  height: 100vh;
+}
+
 .bg-orange-50 {
   background-color: $orange50;
+}
+
+.text-nowrap {
+  text-wrap: nowrap;
 }
