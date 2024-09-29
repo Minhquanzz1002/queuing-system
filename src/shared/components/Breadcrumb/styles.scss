@@ -1,0 +1,17 @@
+.breadcrumb {
+  .ant-breadcrumb-separator {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumb-link {
+    &:hover {
+      background: none;
+    }
+
+    font: {
+      size: 2rem;
+      weight: 700;
+    };
+  }
+}

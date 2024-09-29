@@ -2,7 +2,15 @@ import React, {PropsWithChildren, useEffect, useState} from 'react';
 import {Flex, Layout, Menu, MenuProps} from "antd";
 import Sider from "antd/es/layout/Sider";
 import {logo} from "@assets/images";
-import {IconChat, IconDocumentReport, IconElement, IconLayer, IconMonitor, IconSetting} from "@assets/icons";
+import {
+    IconChat,
+    IconDocumentReport,
+    IconElement,
+    IconLayer,
+    IconLogOut,
+    IconMonitor,
+    IconSetting
+} from "@assets/icons";
 import {MoreOutlined} from "@ant-design/icons";
 import {Content} from "antd/es/layout/layout";
 import {Link, useLocation} from "react-router-dom";
@@ -48,18 +56,15 @@ const DefaultLayout: React.FC<PropsWithChildren> = props => {
 
     useEffect(() => {
         const pathSnippets = location.pathname.split('/').filter(i => i);
-        const selectedKey = '/' + pathSnippets.join('/');
 
-        setSelectedKeys([selectedKey]);
+        console.log('pathSnippets', pathSnippets);
 
-        if (selectedKey.startsWith('/cai-dat')) {
-            setSelectedKeys([selectedKey, '/cai-dat']);
-        }
+        setSelectedKeys(['/' + pathSnippets[0]]);
     }, [location]);
 
     return (
         <Layout style={{minHeight: '100vh'}}>
-            <Sider width={200} collapsed={false} style={siderStyle}>
+            <Sider width={200} collapsed={false} style={siderStyle} className="sidebar">
                 <Flex vertical justify="space-between" style={{height: '100%'}}>
                     <div>
                         <Flex justify="center" align="center" style={{marginBottom: '5.4rem', marginTop: '3rem'}}>
@@ -68,8 +73,11 @@ const DefaultLayout: React.FC<PropsWithChildren> = props => {
                         <Menu mode="vertical" selectedKeys={selectedKeys} defaultSelectedKeys={['dashboard']}
                               expandIcon={<MoreOutlined/>} items={items}/>
                     </div>
-                    <div>
-                        butto
+                    <div style={{marginBottom: '3.2rem', paddingInline: '1.2rem'}}>
+                        <button className="sidebar__btn-logout">
+                            <IconLogOut/>
+                            <span>Đăng xuất</span>
+                        </button>
                     </div>
                 </Flex>
 
