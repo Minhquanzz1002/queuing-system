@@ -14,7 +14,7 @@ function App() {
             theme={{
                 components: {
                     Menu: {
-
+                        itemActiveBg: 'rgba(255, 117, 6, 1)',
                         itemColor: 'rgba(126, 125, 136, 1)',
                         itemHoverBg: 'rgba(255, 117, 6, 1)',
                         itemHoverColor: 'white',
@@ -23,14 +23,22 @@ function App() {
                         itemMarginInline: 0,
                         itemBorderRadius: 0,
                         itemPaddingInline: 12,
+                        horizontalItemSelectedBg: 'rgba(255, 117, 6, 1)',
                     },
                     Breadcrumb: {
                         itemColor: '#7E7D88',
                         lastItemColor: '#FF7506',
+                        linkColor: '#7E7D88',
+                        linkHoverColor: '#7E7D88',
+                        separatorColor: '#7E7D88',
                     },
                     Typography: {
-                        colorTextHeading: '#FF7506'
+                        colorTextHeading: '#FF7506',
+                        fontWeightStrong: 700,
                     },
+                    Form: {
+                        labelFontSize: 16,
+                    }
                 },
                 token: {
                     colorPrimary: "#FF9138",

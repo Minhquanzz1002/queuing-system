@@ -1,13 +1,54 @@
-import React from 'react';
-import {IconChevronRight, IconCircle, IconSquarePlus} from "@assets/icons";
+import React, {useEffect, useRef, useState} from 'react';
+import {IconCircle, IconSquarePlus} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
-import {Breadcrumb, Button, Flex, TableProps, Typography} from "antd";
+import {Flex, TableProps, Typography} from "antd";
 import Table from "@shared/components/Table";
 import {Link} from "react-router-dom";
-import ActionButton from "@shared/components/Button/ActionButton";
+import ActionButton from "src/shared/components/ActionButton";
 import Select from "@shared/components/Select";
 import Input from "@shared/components/Input";
 import {Device} from "@modules/devices/interface";
+import {useSingleAsync} from "@shared/hook/useAsync";
+import {getDevices} from "@modules/devices/repository";
+import useClickOutside from "@shared/hook/useClickOutside";
+import ButtonLink from "@shared/components/ButtonLink";
+import Breadcrumb from "@shared/components/Breadcrumb";
+
+const RenderServiceColumn = ({services}: { services: string[] }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const expandedRef = useRef<HTMLDivElement>(null);
+    useClickOutside<HTMLDivElement>(expandedRef, () => setIsExpanded(false));
+
+    const handleToggleExpand = () => {
+        setIsExpanded(prevState => !prevState);
+    };
+
+    return (
+        <div style={{width: '25rem', position: 'relative'}}>
+            <div style={{textWrap: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                {services.join(', ')}
+            </div>
+            <ButtonLink onClick={handleToggleExpand}>Xem thêm</ButtonLink>
+            {
+                isExpanded && (
+                    <div ref={expandedRef} style={{
+                        position: 'absolute',
+                        zIndex: 2,
+                        top: 0,
+                        left: 0,
+                        width: '160%',
+                        backgroundColor: 'white',
+                        borderRadius: '8px',
+                        border: '1px solid #FFC89B',
+                        padding: '4px 8px'
+                    }}>
+                        {services.join(', ')}
+                    </div>
+                )
+            }
+        </div>
+    );
+};
 
 const columns: TableProps<Device>['columns'] = [
     {
@@ -33,9 +74,11 @@ const columns: TableProps<Device>['columns'] = [
             <>
                 {
                     status === 'ACTIVE' ? (
-                        <Flex gap="small"><IconCircle style={{color: '#35C75A'}}/> Hoạt động</Flex>
+                        <Flex gap="small" className="text-nowrap"><IconCircle style={{color: '#35C75A'}}/> Hoạt
+                            động</Flex>
                     ) : (
-                        <Flex gap="small"><IconCircle style={{color: '#E73F3F'}}/>Ngưng hoạt động</Flex>
+                        <Flex gap="small" className="text-nowrap"><IconCircle style={{color: '#E73F3F'}}/>Ngưng hoạt
+                            động</Flex>
                     )
                 }
             </>
@@ -48,8 +91,10 @@ const columns: TableProps<Device>['columns'] = [
         render: (connected) => (
             <>
                 {
-                    connected ? <Flex gap="small"><IconCircle style={{color: '#35C75A'}}/> Kết nối</Flex> :
-                        <Flex gap="small"><IconCircle style={{color: '#E73F3F'}}/>Mất kết nối</Flex>
+                    connected ? <Flex gap="small" className="text-nowrap"><IconCircle style={{color: '#35C75A'}}/> Kết
+                            nối</Flex> :
+                        <Flex gap="small" className="text-nowrap"><IconCircle style={{color: '#E73F3F'}}/>Mất kết
+                            nối</Flex>
                 }
             </>
         ),
@@ -58,149 +103,44 @@ const columns: TableProps<Device>['columns'] = [
         title: 'Dịch vụ sử dụng',
         key: 'services',
         dataIndex: 'services',
-        render: (_, {services}) => (
-            <>
-                {
-                    services.join(', ')
-                }
-            </>
-        ),
+        render: (_, {services}) => <RenderServiceColumn services={services}/>
     },
     {
         title: '',
         key: 'detail',
-        render: (_, record) => (<Link to={`/thiet-bi/chi-tiet/${record.code}`}><Button type="link"
-                                                                                       style={{textDecorationLine: 'underline'}}>Chi
-            tiết</Button></Link>),
+        render: (_, record) => (
+            <Link to={`/thiet-bi/${record.code}/chi-tiet`}>
+                <ButtonLink>
+                    Chi tiết
+                </ButtonLink>
+            </Link>
+        ),
     },
     {
         title: '',
         key: 'update',
-        render: (_, record) => (<Link to={`/thiet-bi/cap-nhat/${record.code}`}><Button type="link"
-                                                                                       style={{textDecorationLine: 'underline'}}>Cập
-            nhật</Button></Link>),
-    },
-];
-
-const data: Device[] = [
-    {
-        code: 'KIO_01',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_02',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'INACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_03',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: true,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_04',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_05',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: true,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_06',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_07',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'INACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_08',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: true,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_09',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'INACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_010',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    },
-    {
-        code: 'KIO_011',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
+        render: (_, record) => (
+            <Link to={`/thiet-bi/${record.code}/cap-nhat`}>
+                <ButtonLink>
+                    Cập nhật
+                </ButtonLink>
+            </Link>),
     },
 ];
 
 const DevicePage = () => {
+    const [devices, setDevices] = useState<Device[]>([]);
+
+    const loadDevices = useSingleAsync(getDevices);
+
+    useEffect(() => {
+        loadDevices.execute().then(setDevices).catch(() => setDevices([]));
+    }, []);
+
     return (
         <div>
             <Flex style={{padding: '2.4rem'}} align="center" justify="space-between">
                 <Breadcrumb
-                    separator={<IconChevronRight/>}
                     items={[
                         {
                             title: 'Thiết bị'
@@ -216,8 +156,8 @@ const DevicePage = () => {
             <div style={{paddingLeft: '2.4rem', paddingRight: '10.4rem'}}>
                 <Typography.Title level={3} style={{marginBottom: '1.6rem'}}>Danh sách thiết
                     bị</Typography.Title>
-                <Flex style={{marginBottom: '1.6rem'}} justify="space-between">
-                    <Flex gap="middle">
+                <Flex style={{marginBottom: '1.6rem'}} justify="space-between" wrap="wrap">
+                    <Flex gap="middle" wrap>
                         <Flex vertical gap={4}>
                             <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}} htmlFor="status">Trạng
                                 thái hoạt động</label>
@@ -253,11 +193,13 @@ const DevicePage = () => {
                         <Input id="search" style={{width: '30rem'}} placeholder="Nhập từ khóa"/>
                     </Flex>
                 </Flex>
-                <Table bordered columns={columns} dataSource={data}/>;
+                <div style={{overflow: 'hidden', borderRadius: '1.2rem'}}>
+                    <Table bordered columns={columns} dataSource={devices} scroll={{x: '100%'}}/>
+                </div>
             </div>
 
-            <ActionButton icon={<IconSquarePlus/>} to="/thiet-bi/them-moi">
-                Thêm<br/> thiết bị
+            <ActionButton>
+                <ActionButton.Item icon={<IconSquarePlus/>} href="/thiet-bi/them-moi">Thêm<br/> thiết bị</ActionButton.Item>
             </ActionButton>
         </div>
     );

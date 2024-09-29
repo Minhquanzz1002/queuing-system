@@ -1,4 +1,5 @@
 import React from 'react';
+import "./styles.scss";
 import {ConfigProvider, Table as TableAntd, TableProps as AntdTableProps} from "antd";
 import {CaretLeftFilled, CaretRightFilled} from "@ant-design/icons";
 
@@ -22,7 +23,7 @@ const Table = <RecordType extends object = any>(props: TableProps<RecordType>) =
                     Table: {
                         headerBg: '#FF9138',
                         headerColor: 'white',
-                        borderColor: '#FFF2E7',
+                        borderColor: '#FFE3CD',
                         cellFontSize: 14,
                     },
                     Pagination: {

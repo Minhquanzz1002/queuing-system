@@ -1,20 +1,18 @@
-import React, {useState} from 'react';
-import {IconChevronRight, IconCircle, IconSquarePlus} from "@assets/icons";
+import React, {useEffect, useState} from 'react';
+import {IconCircle, IconSquarePlus} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
-import {Breadcrumb, Button, Flex, TableProps, Typography} from "antd";
+import {Flex, TableProps, Typography} from "antd";
 import Table from "@shared/components/Table";
 import {Link} from "react-router-dom";
-import ActionButton from "@shared/components/Button/ActionButton";
+import ActionButton from "src/shared/components/ActionButton";
 import Select from "@shared/components/Select";
 import Input from "@shared/components/Input";
 import DateRangePicker from "@shared/components/DateRangePicker";
-
-interface Service {
-    code: string;
-    name: string;
-    description: string;
-    status: 'ACTIVE' | 'INACTIVE';
-}
+import ButtonLink from "@shared/components/ButtonLink";
+import {useSingleAsync} from "@shared/hook/useAsync";
+import {getServices} from "@modules/services/repository";
+import Breadcrumb from "@shared/components/Breadcrumb";
+import {Service} from "@modules/services/interface";
 
 const columns: TableProps<Service>['columns'] = [
     {
@@ -51,96 +49,41 @@ const columns: TableProps<Service>['columns'] = [
     {
         title: '',
         key: 'detail',
-        render: (_, record) => (<Link to={`/dich-vu/chi-tiet/${record.code}`}><Button type="link"
-                                                                                       style={{textDecorationLine: 'underline'}}>Chi
-            tiết</Button></Link>),
+        render: (_, record) => (
+            <Link to={`/dich-vu/chi-tiet/${record.code}`}>
+                <ButtonLink >
+                    Chi tiết
+                </ButtonLink>
+            </Link>),
     },
     {
         title: '',
         key: 'update',
-        render: (_, record) => (<Link to={`/dich-vu/cap-nhat/${record.code}`}><Button type="link"
-                                                                                       style={{textDecorationLine: 'underline'}}>Cập
-            nhật</Button></Link>),
-    },
-];
-
-const data: Service[] = [
-    {
-        code: 'DV_01',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_02',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_03',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_04',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_05',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_06',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_07',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_08',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_09',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_010',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_011',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
+        render: (_, record) => (
+            <Link to={`/dich-vu/cap-nhat/${record.code}`}>
+                <ButtonLink>
+                    Cập nhật
+                </ButtonLink>
+            </Link>
+        ),
     },
 ];
 
 const ServicePage = () => {
+    const [services, setServices] = useState<Service[]>([]);
     const [startDate, setStartDate] = useState<Date | undefined>();
     const [endDate, setEndDate] = useState<Date | undefined>(new Date());
+
+    const loadServices = useSingleAsync(getServices);
+
+    useEffect(() => {
+        loadServices.execute().then(setServices).catch(() => setServices([]));
+    }, []);
+
     return (
         <div>
             <Flex style={{padding: '2.4rem'}} align="center" justify="space-between">
                 <Breadcrumb
-                    separator={<IconChevronRight/>}
                     items={[
                         {
                             title: 'Dịch vụ'
@@ -154,7 +97,8 @@ const ServicePage = () => {
             </Flex>
 
             <div style={{paddingLeft: '2.4rem', paddingRight: '10.4rem'}}>
-                <Typography.Title level={3} style={{color: '#FF7506', marginBottom: '1.6rem'}}>Danh sách dịch vụ</Typography.Title>
+                <Typography.Title level={3} style={{color: '#FF7506', marginBottom: '1.6rem'}}>Danh sách dịch
+                    vụ</Typography.Title>
                 <Flex style={{marginBottom: '1.6rem'}} justify="space-between">
                     <Flex gap="middle">
                         <Flex vertical gap={4}>
@@ -174,7 +118,8 @@ const ServicePage = () => {
                         <Flex vertical gap={4}>
                             <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}}
                                    htmlFor="connected">Chọn thời gian</label>
-                            <DateRangePicker  onChangeStartDate={(date) => setStartDate(date)} endDate={endDate} startDate={startDate}
+                            <DateRangePicker onChangeStartDate={(date) => setStartDate(date)} endDate={endDate}
+                                             startDate={startDate}
                                              onChangeEndDate={(date) => setEndDate(date)}/>
                         </Flex>
                     </Flex>
@@ -185,11 +130,11 @@ const ServicePage = () => {
                         <Input style={{width: '30rem'}} id="search" placeholder="Nhập từ khóa"/>
                     </Flex>
                 </Flex>
-                <Table bordered columns={columns} dataSource={data}/>;
+                <Table bordered columns={columns} dataSource={services}/>;
             </div>
 
-            <ActionButton icon={<IconSquarePlus/>} to="/dich-vu/them">
-                Thêm<br/> dịch vụ
+            <ActionButton>
+                <ActionButton.Item icon={<IconSquarePlus/>} href="/dich-vu/them-moi">Thêm<br/> dịch vụ</ActionButton.Item>
             </ActionButton>
         </div>
     );

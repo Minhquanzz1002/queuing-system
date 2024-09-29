@@ -1,13 +1,18 @@
-import React, {useState} from 'react';
-import {Breadcrumb, Col, Flex, Row, Typography} from "antd";
-import {IconChevronRight, IconSquarePlus} from "@assets/icons";
+import React, {useEffect, useState} from 'react';
+import {Col, Flex, Row, Spin, Typography} from "antd";
+import {IconSquarePlus} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
-import ActionButton from "@shared/components/Button/ActionButton";
+import ActionButton from "src/shared/components/ActionButton";
 import {Device} from "@modules/devices/interface";
 import "./styles.scss";
 import Card from "@shared/components/Card";
+import Breadcrumb from "@shared/components/Breadcrumb";
+import {useSingleAsync} from "@shared/hook/useAsync";
+import {getDeviceByCode} from "@modules/devices/repository";
+import {useParams} from "react-router-dom";
+import NotFound from "@shared/components/NotFound";
 
-const InfoItem = ({label, value} : {label: string; value: string}) => (
+const InfoItem = ({label, value}: { label: string; value: string }) => (
     <Col span={12} className="device-detail__info-item">
         <div className="device-detail__info-label">{label}</div>
         <div className="device-detail__info-value">{value}</div>
@@ -15,22 +20,32 @@ const InfoItem = ({label, value} : {label: string; value: string}) => (
 );
 
 const DeviceDetailPage = () => {
-    const [device] = useState<Device>({
-        code: 'KIO_01',
-        name: 'Kiosk',
-        ip: '192.168.1.10',
-        status: 'ACTIVE',
-        connected: false,
-        services: [
-            'Khám tim mạch', 'Khám mắt', 'Khám tim'
-        ]
-    });
+    const {code} = useParams<{ code: string }>();
+    const [device, setDevice] = useState<Device | null>(null);
+    const loadDevice = useSingleAsync(getDeviceByCode);
+
+    useEffect(() => {
+        if (code) {
+            loadDevice.execute(code).then(setDevice).catch(() => setDevice(null));
+        }
+    }, [code]);
+
+    if (loadDevice.status === "loading") {
+        return (
+            <Flex align="center" justify="center" className="h-100vh">
+                <Spin size="large" />
+            </Flex>
+        );
+    }
+
+    if (!device) {
+        return <NotFound/>;
+    }
 
     return (
         <div className="device-detail">
             <Flex style={{padding: '2.4rem'}} align="center" justify="space-between">
                 <Breadcrumb
-                    separator={<IconChevronRight/>}
                     items={[
                         {
                             title: 'Thiết bị'
@@ -57,11 +72,11 @@ const DeviceDetailPage = () => {
 
                     <Row gutter={[16, 16]} className="device-detail__info-grid">
                         <InfoItem label="Mã thiết bị:" value={device.code}/>
-                        <InfoItem label="Loại thiết bị:" value="Kiosk"/>
+                        <InfoItem label="Loại thiết bị:" value={device.type}/>
                         <InfoItem label="Tên thiết bị:" value={device.name}/>
-                        <InfoItem label="Tên đăng nhập:" value="Quan123123"/>
+                        <InfoItem label="Tên đăng nhập:" value={device.username}/>
                         <InfoItem label="Địa chỉ IP:" value={device.ip}/>
-                        <InfoItem label="Mật khẩu:" value="CMS"/>
+                        <InfoItem label="Mật khẩu:" value={device.password}/>
                     </Row>
 
                     <div>
@@ -71,8 +86,8 @@ const DeviceDetailPage = () => {
                 </Card>
             </div>
 
-            <ActionButton icon={<IconSquarePlus/>} to="/thiet-bi/them">
-                Cập nhật<br/> thiết bị
+            <ActionButton>
+                <ActionButton.Item icon={<IconSquarePlus/>} href={`/thiet-bi/${device.code}/cap-nhat`}>Cập nhật<br/> thiết bị</ActionButton.Item>
             </ActionButton>
         </div>
     );

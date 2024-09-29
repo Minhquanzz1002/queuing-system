@@ -1,6 +1,7 @@
 {
   "extends": [
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended"
   ],
   "plugins": ["react", "@typescript-eslint"],
   "env": {
@@ -8,6 +9,11 @@
     "es6": true,
     "jest": true,
     "node": true
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
   },
   "parserOptions": {
     "ecmaFeatures": {
@@ -24,6 +30,7 @@
     "semi": "warn",           // Cảnh báo khi không có dấu ; cuối dòng lệnh
     "space-infix-ops": "error",  // Phải tuân thủ quy tắc. Ex: const a = 1 + 2 thay vì const a=1+2
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-var-requires": "off"
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-require-imports": "off"
   }
 }

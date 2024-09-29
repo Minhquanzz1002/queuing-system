@@ -1,0 +1,41 @@
+@import "../../styles/variable";
+
+.service-detail {
+
+  &__content {
+    padding: {
+      left: 2.4rem;
+      right: 10.4rem;
+    }
+  }
+
+  &__info {
+    &-grid {
+      margin-bottom: 1.6rem;
+    }
+
+    &-item {
+      display: flex;
+      align-items: center;
+    }
+
+    &-label {
+      font: {
+        size: 1.6rem;
+        weight: 600;
+      };
+      line-height: 2.4rem;
+      color: $gray500;
+      min-width: 10rem;
+    }
+
+    &-value {
+      font: {
+        size: 1.6rem;
+        weight: 400;
+      };
+      line-height: 2.4rem;
+      color: $gray400;
+    }
+  }
+}
