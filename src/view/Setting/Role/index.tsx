@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {IconSquarePlus} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
-import {Flex, TableProps, Typography} from "antd";
+import {Flex, Form, TableProps, Typography} from "antd";
 import Table from "@shared/components/Table";
 import {Link} from "react-router-dom";
 import ActionButton from "src/shared/components/ActionButton";
@@ -20,8 +20,8 @@ const columns: TableProps<Role>['columns'] = [
     },
     {
         title: 'Số người dùng',
-        dataIndex: 'count',
-        key: 'count',
+        dataIndex: 'userCount',
+        key: 'userCount',
     },
     {
         title: 'Mô tả',
@@ -69,13 +69,13 @@ const RoleAddPage = () => {
                 <Typography.Title level={3} style={{color: '#FF7506', marginBottom: '1.6rem'}}>Danh sách vai
                     trò</Typography.Title>
 
-                <Flex style={{marginBottom: '1.6rem'}} justify="end">
-                    <Flex vertical gap={4}>
-                        <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}} htmlFor="search">Từ
-                            khóa</label>
-                        <Input style={{width: '30rem'}} id="search" placeholder="Nhập từ khóa"/>
+                <Form layout="vertical">
+                    <Flex justify="end">
+                        <Form.Item label="Từ khóa">
+                            <Input style={{width: '30rem'}} id="search" placeholder="Nhập từ khóa"/>
+                        </Form.Item>
                     </Flex>
-                </Flex>
+                </Form>
                 <Table bordered columns={columns} dataSource={roles}/>;
             </div>
 

@@ -19,7 +19,7 @@ const Breadcrumb = (props: BreadcrumbProps) => {
     return (
         <BreadcrumbAntd
             className="breadcrumb"
-            separator={<IconChevronRight/>}
+            separator={<IconChevronRight style={{color: 'rgba(126, 125, 136, 1)'}}/>}
             itemRender={itemRender}
             {...props}
         />

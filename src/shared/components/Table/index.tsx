@@ -1,6 +1,6 @@
 import React from 'react';
 import "./styles.scss";
-import {ConfigProvider, Table as TableAntd, TableProps as AntdTableProps} from "antd";
+import {ConfigProvider, Empty, Table as TableAntd, TableProps as AntdTableProps} from "antd";
 import {CaretLeftFilled, CaretRightFilled} from "@ant-design/icons";
 
 type TableProps<RecordType> = AntdTableProps<RecordType>
@@ -37,8 +37,12 @@ const Table = <RecordType extends object = any>(props: TableProps<RecordType>) =
                     fontWeightStrong: 700,
                 }
             }}
+            renderEmpty={() => <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Không có dữ liệu"/>}
         >
-            <TableAntd {...props} rowHoverable={false} pagination={{itemRender}} rowClassName={(record, index) => index % 2 === 0 ? '' : 'bg-orange-50'}/>
+            <TableAntd {...props} rowHoverable={false}
+                       pagination={{itemRender}}
+                       rowClassName={(record, index) => index % 2 === 0 ? '' : 'bg-orange-50'}
+            />
         </ConfigProvider>
     );
 };

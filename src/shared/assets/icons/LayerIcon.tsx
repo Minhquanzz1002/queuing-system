@@ -1,11 +1,12 @@
 import React from "react";
 import {GetProps} from "antd";
 import Icon from "@ant-design/icons";
+import {SizeProps} from "@assets/icons/interface";
 
-type ICustomIconProps = GetProps<typeof Icon>
+type ICustomIconProps = GetProps<typeof Icon> & SizeProps;
 
-const LayerSvg = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+const LayerSvg = ({width = 20, height = 20}: SizeProps) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 20 20" fill="none">
         <g clipPath="url(#clip0_2710_3362)">
             <path d="M1.66666 14.167L10 18.3337L18.3333 14.167" stroke="currentColor" strokeWidth="1.66667"
                   strokeLinecap="round" strokeLinejoin="round"/>
@@ -22,5 +23,5 @@ const LayerSvg = () => (
     </svg>
 );
 
-const LayerIcon = (props: Partial<ICustomIconProps>) => <Icon {...props} component={LayerSvg}/>;
+const LayerIcon = ({height, width,...props}: Partial<ICustomIconProps>) => <Icon {...props} component={() => <LayerSvg height={height} width={width}/>}/>;
 export default LayerIcon;
