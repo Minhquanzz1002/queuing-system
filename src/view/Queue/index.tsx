@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {IconCircle, IconSquarePlus} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
-import {Button, Flex, TableProps, Typography} from "antd";
+import {Flex, Form, TableProps, Typography} from "antd";
 import Table from "@shared/components/Table";
 import {Link} from "react-router-dom";
 import ActionButton from "src/shared/components/ActionButton";
@@ -9,32 +9,44 @@ import Select from "@shared/components/Select";
 import Input from "@shared/components/Input";
 import DateRangePicker from "@shared/components/DateRangePicker";
 import Breadcrumb from "@shared/components/Breadcrumb";
-
-interface Service {
-    code: string;
-    name: string;
-    description: string;
-    status: 'ACTIVE' | 'INACTIVE';
-}
+import ButtonLink from "@shared/components/ButtonLink";
+import {useSingleAsync} from "@shared/hook/useAsync";
+import {getServices} from "@modules/services/repository";
+import {Service} from "@modules/services/interface";
 
 const columns: TableProps<Service>['columns'] = [
     {
-        title: 'Mã dịch vụ',
+        title: 'STT',
         dataIndex: 'code',
         key: 'code',
     },
     {
-        title: 'Tên dịch vụ',
+        title: 'Tên khách hàng',
         dataIndex: 'name',
         key: 'name',
     },
     {
-        title: 'Mô tả',
+        title: 'Tên dịch vụ',
         dataIndex: 'description',
         key: 'description',
     },
     {
-        title: 'Trạng thái hoạt động',
+        title: 'Thời gian cấp',
+        dataIndex: 'description',
+        key: 'description',
+    },
+    {
+        title: 'Hạn sử dụng',
+        dataIndex: 'description',
+        key: 'description',
+    },
+    {
+        title: 'Trạng thái',
+        dataIndex: 'description',
+        key: 'description',
+    },
+    {
+        title: 'Nguồn cấp',
         key: 'status',
         dataIndex: 'status',
         render: (status) => (
@@ -52,91 +64,27 @@ const columns: TableProps<Service>['columns'] = [
     {
         title: '',
         key: 'detail',
-        render: (_, record) => (<Link to={`/dich-vu/chi-tiet/${record.code}`}><Button type="link"
-                                                                                      style={{textDecorationLine: 'underline'}}>Chi
-            tiết</Button></Link>),
-    },
-    {
-        title: '',
-        key: 'update',
-        render: (_, record) => (<Link to={`/dich-vu/cap-nhat/${record.code}`}><Button type="link"
-                                                                                      style={{textDecorationLine: 'underline'}}>Cập
-            nhật</Button></Link>),
-    },
-];
-
-const data: Service[] = [
-    {
-        code: 'DV_01',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_02',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_03',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_04',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_05',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_06',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_07',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_08',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_09',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_010',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_011',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
+        render: (_, record) => (
+            <Link to={`/cap-so/chi-tiet/${record.code}`}>
+                <ButtonLink>
+                    Chi tiết
+                </ButtonLink>
+            </Link>
+        ),
     },
 ];
 
 const QueuePage = () => {
     const [startDate, setStartDate] = useState<Date | undefined>();
     const [endDate, setEndDate] = useState<Date | undefined>(new Date());
+
+    const [services, setServices] = useState<Service[]>([]);
+    const loadServices = useSingleAsync(getServices);
+
+    useEffect(() => {
+        loadServices.execute('ACTIVE').then(setServices).catch(() => setServices([]));
+    }, []);
+
     return (
         <div>
             <Flex style={{padding: '2.4rem'}} align="center" justify="space-between">
@@ -154,44 +102,67 @@ const QueuePage = () => {
             </Flex>
 
             <div style={{paddingLeft: '2.4rem', paddingRight: '10.4rem'}}>
-                <Typography.Title level={3} style={{color: '#FF7506', marginBottom: '1.6rem'}}>Quản lý cấp số</Typography.Title>
+                <Typography.Title level={3} style={{color: '#FF7506', marginBottom: '1.6rem'}}>Quản lý cấp
+                    số</Typography.Title>
 
-                <Flex style={{marginBottom: '1.6rem'}} justify="space-between">
-                    <Flex gap="middle">
-                        <Flex vertical gap={4}>
-                            <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}} htmlFor="status">Trạng
-                                thái hoạt động</label>
-                            <Select id="status"
-                                    style={{width: '30rem'}}
-                                    defaultValue="all"
+                <Form layout="vertical">
+                    <Flex justify="space-between" wrap>
+                        <Form.Item label="Tên dịch vụ">
+                            <Select style={{width: '15.5rem'}}
+                                    defaultValue="Tất cả"
+                            >
+                                <Select.Option key="" value="Tất cả">Tất cả</Select.Option>
+                                {
+                                    services.map((service: Service) => (
+                                        <Select.Option key={service.code} value={service.code}>{service.name}</Select.Option>
+                                    ))
+                                }
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item label="Tình trạng">
+                            <Select style={{width: '15.5rem'}}
+                                    defaultValue="Tất cả"
                                     options={[
-                                        {value: 'all', label: 'Tất cả'},
-                                        {value: '1', label: 'Hoạt động'},
-                                        {value: '2', label: 'Ngưng hoạt động'}
+                                        {key: "", value: "Tất cả"},
+                                        {key: "PENDING", value: "Đang chờ"},
+                                        {key: "USED", value: "Đã sử dụng"},
+                                        {key: "SKIPPED", value: "Bỏ qua"}
                                     ]}
                             />
-                        </Flex>
 
-                        <Flex vertical gap={4}>
-                            <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}}
-                                   htmlFor="connected">Chọn thời gian</label>
+                        </Form.Item>
+
+                        <Form.Item label="Nguồn cấp">
+                            <Select style={{width: '15.5rem'}}
+                                    defaultValue="Tất cả"
+                                    options={[
+                                        {key: "", value: "Tất cả"},
+                                        {key: "Kiosk", value: "Kiosk"},
+                                        {key: "System", value: "Hệ thống"},
+                                    ]}
+                            />
+
+                        </Form.Item>
+
+                        <Form.Item label="Chọn thời gian">
                             <DateRangePicker onChangeStartDate={(date) => setStartDate(date)} endDate={endDate}
                                              startDate={startDate}
                                              onChangeEndDate={(date) => setEndDate(date)}/>
-                        </Flex>
-                    </Flex>
+                        </Form.Item>
 
-                    <Flex vertical gap={4}>
-                        <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}} htmlFor="search">Từ
-                            khóa</label>
-                        <Input style={{width: '30rem'}} id="search" placeholder="Nhập từ khóa"/>
+                        <Form.Item label="Từ khóa">
+                            <Input style={{width: '30rem'}} id="search" placeholder="Nhập từ khóa"/>
+                        </Form.Item>
                     </Flex>
-                </Flex>
-                <Table bordered columns={columns} dataSource={data}/>;
+                </Form>
+                <Table bordered columns={columns}/>;
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconSquarePlus/>} href="/cap-so/cap-so-moi">Cấp<br/> số mới</ActionButton.Item>
+                <ActionButton.Item icon={<IconSquarePlus/>} href="/cap-so/cap-so-moi">
+                    Cấp<br/> số mới
+                </ActionButton.Item>
             </ActionButton>
         </div>
     );

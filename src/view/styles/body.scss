@@ -79,8 +79,15 @@ button {
 @font-face {
   font-family: 'Nunito';
   font-style: normal;
-  font-weight: 900;
+  font-weight: 800;
   src: local("Nunito"), url("../../shared/assets/font/Nunito/Nunito-ExtraBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 900;
+  src: local("Nunito"), url("../../shared/assets/font/Nunito/Nunito-Black.ttf") format("truetype");
 }
 //---------------------------
 //      CUSTOM ANTD          |

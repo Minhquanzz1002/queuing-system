@@ -1,11 +1,12 @@
 import React from "react";
 import {GetProps} from "antd";
 import Icon from "@ant-design/icons";
+import {SizeProps} from "@assets/icons/interface";
 
 type ICustomIconProps = GetProps<typeof Icon>
 
-const Svg = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="19" viewBox="0 0 22 19" fill="none">
+const Svg = ({width = 22, height = 19}: SizeProps) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 22 19" fill="none">
         <path
             d="M21 7.18601C21 9.06092 19.9887 10.7464 18.3785 11.9193C18.3228 11.9583 18.2921 12.0251 18.2893 12.092L18.2197 13.9168C18.2113 14.1619 17.9411 14.304 17.7349 14.1731L16.1888 13.2008C16.1888 13.2008 16.1888 13.2008 16.186 13.2008C16.0968 13.1423 15.9882 13.1256 15.8879 13.1562C14.9685 13.4431 13.9684 13.6019 12.9209 13.6019C12.907 13.6019 12.893 13.6019 12.8791 13.6019C12.907 13.4181 12.9209 13.2314 12.9209 13.042C12.9209 10.426 10.252 8.30594 6.95906 8.30594C6.28209 8.30594 5.63297 8.39509 5.02564 8.55946C4.90306 8.1165 4.83899 7.65404 4.83899 7.18044C4.83899 3.63398 8.45509 0.761719 12.9181 0.761719C17.3839 0.767291 21 3.64234 21 7.18601Z"
             stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10"/>
@@ -15,5 +16,5 @@ const Svg = () => (
     </svg>
 );
 
-const ChatIcon = (props: Partial<ICustomIconProps>) => <Icon {...props} component={Svg}/>;
+const ChatIcon = ({height, width,...props}: Partial<ICustomIconProps>) => <Icon {...props} component={() => <Svg width={width} height={height}/>}/>;
 export default ChatIcon;

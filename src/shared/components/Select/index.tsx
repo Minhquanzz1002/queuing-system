@@ -18,4 +18,6 @@ const Select = (props: SelectAntdProps) => {
     );
 };
 
+Select.Option = SelectAntd.Option;
+
 export default Select;

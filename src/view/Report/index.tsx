@@ -7,15 +7,9 @@ import {Link} from "react-router-dom";
 import ActionButton from "src/shared/components/ActionButton";
 import DateRangePicker from "@shared/components/DateRangePicker";
 import Breadcrumb from "@shared/components/Breadcrumb";
+import {Queue} from "@modules/queue/interface";
 
-interface Service {
-    code: string;
-    name: string;
-    description: string;
-    status: 'ACTIVE' | 'INACTIVE';
-}
-
-const columns: TableProps<Service>['columns'] = [
+const columns: TableProps<Queue>['columns'] = [
     {
         title: 'Số thứ tự',
         dataIndex: 'code',
@@ -56,75 +50,6 @@ const columns: TableProps<Service>['columns'] = [
     },
 ];
 
-const data: Service[] = [
-    {
-        code: 'DV_01',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_02',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_03',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_04',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_05',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_06',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_07',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_08',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_09',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_010',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-    {
-        code: 'DV_011',
-        name: 'Dịch vụ',
-        description: 'Mô tả',
-        status: 'ACTIVE',
-    },
-];
-
 const ReportPage = () => {
     const [startDate, setStartDate] = useState<Date | undefined>();
     const [endDate, setEndDate] = useState<Date | undefined>(new Date());
@@ -154,7 +79,7 @@ const ReportPage = () => {
                                          onChangeEndDate={(date) => setEndDate(date)}/>
                     </Flex>
                 </Flex>
-                <Table bordered columns={columns} dataSource={data}/>;
+                <Table bordered columns={columns}/>;
             </div>
 
             <ActionButton>
