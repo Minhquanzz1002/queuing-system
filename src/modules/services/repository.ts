@@ -4,8 +4,13 @@ import {Service} from "@modules/services/interface";
 
 const servicesRef = collection(db, 'services');
 
-export const getServices = async (): Promise<Service[]> => {
-    const q = query(servicesRef, orderBy('code', 'asc'));
+export const getServices = async (status?: "ACTIVE" | "INACTIVE"): Promise<Service[]> => {
+    const conditions = [];
+    if (status) {
+        conditions.push(where('status', '==', status));
+    }
+
+    const q = query(servicesRef, ...conditions, orderBy('code', 'asc'));
 
     const serviceSnapshots = await getDocs(q);
     return serviceSnapshots.docs.map(doc => {

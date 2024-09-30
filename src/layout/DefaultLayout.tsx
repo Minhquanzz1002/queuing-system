@@ -56,9 +56,6 @@ const DefaultLayout: React.FC<PropsWithChildren> = props => {
 
     useEffect(() => {
         const pathSnippets = location.pathname.split('/').filter(i => i);
-
-        console.log('pathSnippets', pathSnippets);
-
         setSelectedKeys(['/' + pathSnippets[0]]);
     }, [location]);
 

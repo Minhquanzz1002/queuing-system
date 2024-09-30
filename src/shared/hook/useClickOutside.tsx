@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect} from "react";
 type Event =  MouseEvent | TouchEvent;
 
+// eslint-disable-next-line no-unused-vars
 const useClickOutside = <T extends  HTMLElement> (ref: React.RefObject<T>, onClickOutside: (e: Event) => void) => {
     const handleClickOutside = useCallback(
         (event: Event) => {

@@ -3,10 +3,14 @@ import "@styles/styles.scss";
 import {PublicPage} from "@routers/component/PublicPage";
 import {ConfigProvider} from "antd";
 import {PrivatePage} from "@routers/component/PrivatePage";
+import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const MainView = memo(({statusLogin}: { statusLogin: boolean }) => {
     return (<>{statusLogin ? <PrivatePage/> : <PublicPage/>}</>);
 });
+
+dayjs.extend(relativeTime);
 
 function App() {
     return (

@@ -1,7 +1,12 @@
+export {default as IconArrowDownShort} from './ArrowDownShortIcon';
+export {default as IconArrowUpShort} from './ArrowUpShortIcon';
 export {default as IconAsterisk} from './AsteriskIcon';
 export {default as IconBackSquare} from './BackSquareIcon';
 export {default as IconBell} from './BellIcon';
+export {default as IconBookmarkStar} from './BookmarkStarIcon';
+export {default as IconCalendarCheck} from './CalendarCheckIcon';
 export {default as IconCalendarDays} from './CalendarDaysIcon';
+export {default as IconCalendarNonCheck} from './CalendarNonCheckIcon';
 export {default as IconChat} from './ChatIcon';
 export {default as IconChevronRight} from './ChevronRightIcon';
 export {default as IconCircle} from './CircleIcon';

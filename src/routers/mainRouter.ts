@@ -18,6 +18,10 @@ import {roleUpdateRouter} from "@view/Setting/Role/Update/router";
 import {userManagementSettingRouter} from "@view/Setting/User/router";
 import {userAddRouter} from "@view/Setting/User/Add/router";
 import {userUpdateRouter} from "@view/Setting/User/Update/router";
+import {newQueueNumberRouter} from "@view/Queue/Add/router";
+import {notFoundRouter} from "@view/NotFound/router";
+import {userLogSettingRouter} from "@view/Setting/UserLog/router";
+import {queueDetailRouter} from "@view/Queue/Detail/router";
 
 export const privatePage : IRouter[] = [
     dashboardRouter,
@@ -31,12 +35,16 @@ export const privatePage : IRouter[] = [
     serviceDetailRouter,
     reportRouter,
     queueRouter,
+    newQueueNumberRouter,
+    queueDetailRouter,
     roleManagementSettingRouter,
     roleAddRouter,
     roleUpdateRouter,
     userManagementSettingRouter,
+    userLogSettingRouter,
     userAddRouter,
     userUpdateRouter,
+    notFoundRouter,
 ];
 export const publicPage : IRouter[] = [
     loginRouter,
