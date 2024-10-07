@@ -1,20 +1,51 @@
-import {addDoc, collection, getDocs, limit, orderBy, query, where, updateDoc, doc} from "firebase/firestore";
+import {
+    addDoc,
+    collection,
+    doc,
+    getDocs,
+    limit,
+    orderBy,
+    query,
+    updateDoc,
+    where,
+    QueryConstraint,
+    getDoc
+} from "firebase/firestore";
 import {db} from "@config/firebaseConfig";
 import {Device} from "@modules/devices/interface";
+import {Service} from "@modules/services/interface";
 
 const devicesRef = collection(db, 'devices');
 
-export const getDevices = async (): Promise<Device[]> => {
-    const q = query(devicesRef, orderBy('code', 'asc'));
+export const getDevices = async (status?: "ACTIVE" | "INACTIVE", connected?: boolean): Promise<Device[]> => {
+    const conditions : QueryConstraint[] = [
+        ...(status ? [where('status', '==', status)] : []),
+        ...(connected !== undefined ? [where('connected', '==', connected)] : [])
+    ];
+
+    const q = query(devicesRef, ...conditions, orderBy('code', 'asc'));
 
     const deviceSnapshots = await getDocs(q);
-    return deviceSnapshots.docs.map(doc => {
-        const data = doc.data();
+    return await Promise.all(deviceSnapshots.docs.map(async d => {
+        const data = d.data();
+        const serviceRefs = data.services || [];
+        const services = await Promise.all(serviceRefs.map(async (serviceRef: any) => {
+            const serviceDoc = await getDoc(serviceRef);
+            if (!serviceDoc.exists()) {
+                return null;
+            }
+            const serviceData = serviceDoc.data();
+            if (typeof serviceData !== 'object') {
+                return null;
+            }
+            return { id: serviceDoc.id, ...serviceData } as Service;
+        }));
         return {
-            id: doc.id,
-            ...data
+            id: d.id,
+            ...data,
+            services
         } as Device;
-    });
+    }));
 };
 
 export const getDeviceByCode = async (code: string): Promise<Device | null> => {
@@ -29,19 +60,35 @@ export const getDeviceByCode = async (code: string): Promise<Device | null> => {
     if (!deviceSnapshots.empty) {
         const doc = deviceSnapshots.docs[0];
         const data = doc.data();
+        const serviceRefs = data.services || [];
+        const services = await Promise.all(serviceRefs.map(async (serviceRef: any) => {
+            const serviceDoc = await getDoc(serviceRef);
+            if (!serviceDoc.exists()) {
+                return null;
+            }
+            const serviceData = serviceDoc.data();
+            if (typeof serviceData !== 'object') {
+                return null;
+            }
+            return { id: serviceDoc.id, ...serviceData } as Service;
+        }));
         return {
             id: doc.id,
-            ...data
+            ...data,
+            services
         } as Device;
     } else {
         return null;
     }
-
 };
 
-export const addDevice = async (device: Omit<Device, 'id'>) => {
+export const addDevice = async (device: Omit<Device, 'id' | 'services'> & {services: string[]}) => {
     try {
-        const docRef = await addDoc(devicesRef, device);
+        const deviceData = {
+            ...device,
+            services: device.services.map(serviceId => doc(db, 'services', serviceId))
+        };
+        const docRef = await addDoc(devicesRef, deviceData);
         return docRef.id;
     } catch (error) {
         console.error('Error adding device: ', error);
@@ -49,10 +96,15 @@ export const addDevice = async (device: Omit<Device, 'id'>) => {
     }
 };
 
-export const updateDevice = async (id: string, updatedData: Partial<Omit<Device, 'id' | 'status' | 'connected'>>) => {
+export const updateDevice = async (id: string, updatedData: Partial<Omit<Device, 'id' | 'status' | 'connected' | 'services'>> & {services: string[]}) => {
     try {
         const deviceDocRef = doc(db, 'devices', id);
-        await updateDoc(deviceDocRef, updatedData);
+        if (updatedData.services) {
+            const updateServices = updatedData.services.map(serviceId => doc(db, 'services', serviceId));
+            await updateDoc(deviceDocRef, {...updatedData, services: updateServices});
+        } else {
+            await updateDoc(deviceDocRef, updatedData);
+        }
         console.log('Device updated successfully');
     } catch (error) {
         console.error('Error updating device: ', error);

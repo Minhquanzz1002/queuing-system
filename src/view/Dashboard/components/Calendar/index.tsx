@@ -6,6 +6,7 @@ import {IconChevronRight} from "@assets/icons";
 
 const Calendar = () => {
     const [currentDate, setCurrentDate] = useState<Dayjs>(dayjs());
+    const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
 
     const handlePrevMonth = () => {
         setCurrentDate(currentDate.subtract(1, 'month'));
@@ -13,6 +14,10 @@ const Calendar = () => {
 
     const handleNextMonth = () => {
         setCurrentDate(currentDate.add(1, 'month'));
+    };
+
+    const handleDayClick = (date: Dayjs) => {
+        setSelectedDate(date);
     };
 
     const generateDays = () => {
@@ -26,18 +31,16 @@ const Calendar = () => {
         const prevMonth = startOfMonth.subtract(1, 'month');
         for (let i = daysFromPrevMonth - 1; i >= 0; i--) {
             daysInMonth.push({
-                day: prevMonth.endOf('month').subtract(i, 'day').format('DD'),
+                date: prevMonth.endOf('month').subtract(i, 'day'),
                 currentMonth: false,
-                isToday: false
             });
         }
 
         for (let day = 1; day <= endOfMonth.date(); day++) {
             const date = startOfMonth.date(day);
             daysInMonth.push({
-                day: date.format('DD'),
+                date: date,
                 currentMonth: true,
-                isToday: date.isSame(dayjs(), 'day')
             });
         }
 
@@ -45,9 +48,8 @@ const Calendar = () => {
         const nextMonth = endOfMonth.add(1, 'day');
         for (let i = 1; i <= daysFromNextMonth; i++) {
             daysInMonth.push({
-                day: nextMonth.date(i).format('DD'),
+                date: nextMonth.date(i),
                 currentMonth: false,
-                isToday: false
             });
         }
 
@@ -68,12 +70,13 @@ const Calendar = () => {
                 ))}
             </div>
             <div className="calendar__grid">
-                {generateDays().map(({day, currentMonth, isToday}, index) => (
+                {generateDays().map(({date, currentMonth}, index) => (
                     <Flex align="center" justify="center"
                           key={index}
-                          className={`calendar__day ${currentMonth ? 'calendar__day--current' : 'calendar__day--other-month'} ${isToday && 'calendar__day--today'}`}
+                          className={`calendar__day ${currentMonth ? 'calendar__day--current' : 'calendar__day--other-month'} ${selectedDate.isSame(date, 'day') && 'calendar__day--selected'}`}
+                          onClick={() => handleDayClick(date)}
                     >
-                        {day}
+                        {date.format("DD")}
                     </Flex>
                 ))}
             </div>

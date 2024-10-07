@@ -13,6 +13,9 @@ import {
 } from "@assets/icons";
 import Calendar from "@view/Dashboard/components/Calendar";
 import StatusCard from "@view/Dashboard/components/StatusCard";
+import {Link} from "react-router-dom";
+import AreaChartStatistics from "@view/Dashboard/components/AreaChartStatistics";
+import Card from "@shared/components/Card";
 
 const Dashboard = () => {
     return (
@@ -37,7 +40,7 @@ const Dashboard = () => {
                                         icon: <IconCalendarNonCheck style={{color: 'rgba(100, 147, 249, 1)'}}/>,
                                         color: 'rgba(100, 147, 249, 0.15)'
                                     }}
-                                    total={4.221}
+                                    total={4221}
                             />
                         </Col>
                         <Col span={6}>
@@ -47,7 +50,7 @@ const Dashboard = () => {
                                         icon: <IconCalendarCheck style={{color: 'rgba(53, 199, 90, 1)'}}/>,
                                         color: 'rgba(53, 199, 90, 0.15)'
                                     }}
-                                    total={3.721}
+                                    total={3721}
                             />
                         </Col>
                         <Col span={6}>
@@ -74,6 +77,11 @@ const Dashboard = () => {
                             />
                         </Col>
                     </Row>
+                    <Card style={{borderRadius: '1.2rem'}}>
+                        <div style={{position: 'absolute', inset: 0, paddingTop: '50px'}}>
+                            <AreaChartStatistics/>
+                        </div>
+                    </Card>
                 </Flex>
             </Col>
             <Col flex="40rem" style={{background: 'white', borderRadius: '8px 0 0 8px', minHeight: '100vh'}}>
@@ -84,31 +92,36 @@ const Dashboard = () => {
                       style={{paddingInline: '2.4rem', paddingTop: '1.6rem', paddingBottom: '1.6rem'}}>
                     <Typography.Title level={3}>Tổng quan</Typography.Title>
                     <Flex vertical gap="1.2rem">
-                        <StatusCard variant="orange"
-                                    title="Thiết bị"
-                                    icon={<IconMonitor height={14} width={14}/>}
-                                    data={[
-                                        {key: "Đang hoạt động", value: 3799},
-                                        {key: "Ngưng hoạt động", value: 422},
-                                    ]}
-                        />
-                        <StatusCard variant="blue"
-                                    title="Dịch vụ"
-                                    icon={<IconChat height={14} width={14}/>}
-                                    data={[
-                                        {key: "Đang hoạt động", value: 210},
-                                        {key: "Ngưng hoạt động", value: 66},
-                                    ]}
-                        />
-                        <StatusCard variant="green"
-                                    title="Cấp số"
-                                    icon={<IconLayer height={14} width={14}/>}
-                                    data={[
-                                        {key: "Đã sử dụng", value: 3721},
-                                        {key: "Đang chờ", value: 486},
-                                        {key: "Bỏ qua", value: 32},
-                                    ]}
-                        />
+                        <Link to="/thiet-bi">
+                            <StatusCard icon={<IconMonitor height={14} width={14}/>}
+                                        datasets={{
+                                            title: "Thiết bị",
+                                            label: ["Đang hoạt động", "Ngưng hoạt động"],
+                                            colors: ["#FF7506", "#7E7D88"],
+                                            data: [3799, 422]
+                                        }}
+                            />
+                        </Link>
+                        <Link to="/dich-vu">
+                            <StatusCard icon={<IconChat height={14} width={14}/>}
+                                        datasets={{
+                                            title: "Dịch vụ",
+                                            label: ["Đang hoạt động", "Ngưng hoạt động"],
+                                            colors: ["#4277FF", "#7E7D88"],
+                                            data: [210, 66]
+                                        }}
+                            />
+                        </Link>
+                        <Link to="/cap-so">
+                            <StatusCard icon={<IconLayer height={14} width={14}/>}
+                                        datasets={{
+                                            title: "Cấp số",
+                                            label: ["Đã sử dụng", "Đang chờ", "Bỏ qua"],
+                                            colors: ["#35C75A", "#7E7D88", "#F178B6"],
+                                            data: [3721, 486, 32]
+                                        }}
+                            />
+                        </Link>
                     </Flex>
                     <Calendar/>
                 </Flex>

@@ -40,13 +40,35 @@ const FormRole = () => {
                 </Flex>
             </Col>
             <Col span={12}>
-                <Form.Item label="Phân quyền theo chức năng" required>
+                <Form.Item label="Phân quyền theo chức năng "
+                           required
+                           name="permissions"
+                           valuePropName="checked"
+                           rules={[
+                               { required: true, message: 'Vui lòng chọn ít nhất một tùy chọn' },
+                               { validator: (_, value) => value && value.length > 0 ? Promise.resolve() : Promise.reject('Vui lòng chọn ít nhất một tùy chọn') }
+                           ]}
+                >
                     <Card style={{background: '#FFF2E7', minHeight: 'unset', borderRadius: '0.8rem'}}>
-                        <Typography.Title level={4}>Nhóm chức năng A</Typography.Title>
-                        <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
-                            Check all
-                        </Checkbox>
-                        <Checkbox.Group options={plainOptions} value={checkedList} onChange={onChange} />
+                        <Flex vertical gap="middle">
+                            <div>
+                                <Typography.Title level={4}>Nhóm chức năng A</Typography.Title>
+                                <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}
+                                          style={{marginBottom: '1.2rem'}}>
+                                    Check all
+                                </Checkbox>
+                                <Checkbox.Group options={plainOptions} value={checkedList} onChange={onChange}/>
+                            </div>
+
+                            <div>
+                                <Typography.Title level={4}>Nhóm chức năng A</Typography.Title>
+                                <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}
+                                          style={{marginBottom: '1.2rem'}}>
+                                    Check all
+                                </Checkbox>
+                                <Checkbox.Group options={plainOptions} value={checkedList} onChange={onChange}/>
+                            </div>
+                        </Flex>
                     </Card>
                 </Form.Item>
             </Col>

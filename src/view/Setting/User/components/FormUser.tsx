@@ -6,7 +6,7 @@ import Select from "@shared/components/Select";
 import {Role} from "@modules/roles/interface";
 import {useSingleAsync} from "@shared/hook/useAsync";
 import {getRoles} from "@modules/roles/repository";
-import {Option} from "antd/es/mentions";
+import {passwordRules, personalNameRules, phoneRules, repeatPasswordRules} from "@helper/formRules";
 
 const FormUser = () => {
     const [roles, setRoles] = useState<Role[]>([]);
@@ -23,36 +23,33 @@ const FormUser = () => {
             <Row gutter={[24, 0]}>
                 <Col span={12}>
                     <Form.Item label="Họ tên:" name="name" required
-                               rules={[
-                                   {required: true, message: 'Vui lòng nhập họ tên'}
-                               ]}
+                               rules={personalNameRules}
                     >
-                        <Input placeholder="Nhập họ tên" size="large" autoFocus/>
+                        <Input placeholder="Nhập họ tên" size="large" autoFocus tabIndex={1}/>
                     </Form.Item>
 
                     <Form.Item label="Số điện thoại:" required name="phone"
-                               rules={[
-                                   {required: true, message: 'Vui lòng nhập số điện thoại'}
-                               ]}
+                               rules={phoneRules}
                     >
-                        <Input placeholder="Nhập số điện thoại" size="large"/>
+                        <Input type="tel" placeholder="Nhập số điện thoại" size="large" tabIndex={3}/>
                     </Form.Item>
 
                     <Form.Item label="Email" required name="email"
                                rules={[
-                                   {required: true, message: 'Vui lòng nhập email'}
+                                   {required: true, message: 'Vui lòng nhập email'},
+                                   {type: 'email', message: 'Email không hợp lệ'}
                                ]}
                     >
-                        <Input placeholder="Nhập email" size="large"/>
+                        <Input placeholder="Nhập email" size="large" tabIndex={5}/>
                     </Form.Item>
                     <Form.Item label="Vai trò" required name="role"
                                rules={[
                                    {required: true, message: 'Vui chọn vai trò'}
                                ]}
                     >
-                        <Select placeholder="Chọn vai trò">
+                        <Select placeholder="Chọn vai trò" tabIndex={7}>
                             {
-                                roles.map((role: Role) => <Option key={role.id} value={role.name}></Option>)
+                                roles.map((role: Role) => <Select.Option key={role.id}>{role.name}</Select.Option>)
                             }
                         </Select>
                     </Form.Item>
@@ -60,34 +57,34 @@ const FormUser = () => {
                 <Col span={12}>
                     <Form.Item label="Tên đăng nhập:" name="username" required
                                rules={[
-                                   {required: true, message: 'Vui lòng nhập tên đăng nhập'}
+                                   {required: true, message: 'Vui lòng nhập tên đăng nhập'},
+                                   {min: 8, message: 'Tên đăng nhập phải có ít nhất 8 ký tự'},
+                                   {
+                                       pattern: /^[a-zA-Z0-9@#$&]+$/,
+                                       message: 'Tên đăng nhập chỉ chứa chữ, số hoặc các ký tự @#$&'
+                                   }
                                ]}
                     >
-                        <Input placeholder="Nhập tài khoản" size="large"/>
+                        <Input placeholder="Nhập tài khoản" size="large" tabIndex={2}/>
                     </Form.Item>
 
                     <Form.Item label="Mật khẩu:" required name="password"
-                               rules={[
-                                   {required: true, message: 'Vui lòng nhập mật khẩu'}
-                               ]}
+                               rules={passwordRules}
                     >
-                        <Input.Password placeholder="Nhập mật khẩu" size="large"/>
+                        <Input.Password placeholder="Nhập mật khẩu" size="large" tabIndex={4}/>
                     </Form.Item>
 
                     <Form.Item label="Nhập lại mật khẩu:" required name="repeatPassword"
-                               rules={[
-                                   {required: true, message: 'Vui lòng nhập mật khẩu'}
-                               ]}
+                               rules={repeatPasswordRules}
                     >
-                        <Input.Password placeholder="Nhập lại mật khẩu" size="large"/>
+                        <Input.Password placeholder="Nhập lại mật khẩu" size="large" tabIndex={6}/>
                     </Form.Item>
                     <Form.Item label="Tình trạng" required name="status"
                                rules={[
                                    {required: true, message: 'Vui chọn tình trạng'}
                                ]}
                     >
-                        <Select placeholder="Chọn loại thiết bị"
-                                defaultValue="ACTIVE"
+                        <Select placeholder="Chọn loại thiết bị" tabIndex={8}
                                 options={[
                                     {label: 'Hoạt động', value: 'ACTIVE'},
                                     {label: 'Ngưng hoạt động', value: 'INACTIVE'},

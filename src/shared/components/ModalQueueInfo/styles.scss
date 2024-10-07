@@ -1,0 +1,66 @@
+@import "../../../view/styles/variable";
+
+.modal-queue-info {
+  &__ticket-number-label {
+    font: {
+      size: 3.2rem;
+      weight: 700;
+    };
+    line-height: 4.8rem;
+    color: $gray400;
+  }
+
+  &__ticket-number {
+    font: {
+      size: 5.6rem;
+      weight: 800;
+    };
+    line-height: 6rem;
+    color: $orange500;
+  }
+
+  &__service-info {
+    font: {
+      size: 1.8rem;
+      weight: 400;
+    };
+    line-height: 2.7rem;
+    color: $gray500;
+  }
+
+  .ant-modal {
+    &-content {
+      border-radius: 2.4rem;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    &-close {
+      color: $orange500;
+    }
+
+    &-close:hover {
+      background: none;
+      color: $orange500;
+    }
+
+    &-body {
+      margin: {
+        top: 4.8rem;
+        bottom: 4.8rem;
+      };
+    }
+
+    &-footer {
+      background: $orange400;
+      padding: 1.6rem 6.7rem;
+
+      .ant-typography {
+        color: white !important;
+        font-size: 2.2rem;
+        font-weight: 700;
+        line-height: 3.3rem;
+      }
+    }
+  }
+}

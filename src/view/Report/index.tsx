@@ -1,41 +1,47 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {IconCircle, IconDocumentDownload} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
-import {Button, Flex, TableProps} from "antd";
+import {Flex, TableProps} from "antd";
 import Table from "@shared/components/Table";
-import {Link} from "react-router-dom";
 import ActionButton from "src/shared/components/ActionButton";
-import DateRangePicker from "@shared/components/DateRangePicker";
 import Breadcrumb from "@shared/components/Breadcrumb";
 import {Queue} from "@modules/queue/interface";
+import dayjs, {Dayjs} from "dayjs";
+import {useSingleAsync} from "@shared/hook/useAsync";
+import {getQueues} from "@modules/queue/repository";
+import RangePicker from "@shared/components/RangePicker";
 
 const columns: TableProps<Queue>['columns'] = [
     {
         title: 'Số thứ tự',
-        dataIndex: 'code',
-        key: 'code',
+        dataIndex: 'serialNumber',
+        key: 'report_serialNumber',
     },
     {
         title: 'Tên dịch vụ',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'service',
+        key: 'report_service',
+        render: (service) => service.name,
     },
     {
         title: 'Thời gian cấp',
-        dataIndex: 'description',
-        key: 'description',
+        dataIndex: 'issueTime',
+        key: 'report_issueTime',
+        render: (issueTime) => dayjs(issueTime).format('HH:mm - DD/MM/YYYY'),
     },
     {
-        title: 'Tình trạng',
-        key: 'status',
+        title: 'Trạng thái',
+        key: 'report_status',
         dataIndex: 'status',
         render: (status) => (
             <>
                 {
-                    status === 'ACTIVE' ? (
-                        <Flex gap="small"><IconCircle style={{color: '#35C75A'}}/> Hoạt động</Flex>
+                    status === 'USED' ? (
+                        <Flex gap="small"><IconCircle style={{color: '#7E7D88'}}/>Đã sử dụng</Flex>
+                    ) : status === 'WAITING' ? (
+                        <Flex gap="small"><IconCircle style={{color: '#4277FF'}}/>Đang chờ</Flex>
                     ) : (
-                        <Flex gap="small"><IconCircle style={{color: '#E73F3F'}}/>Ngưng hoạt động</Flex>
+                        <Flex gap="small"><IconCircle style={{color: '#E73F3F'}}/>Bỏ qua</Flex>
                     )
                 }
             </>
@@ -43,16 +49,27 @@ const columns: TableProps<Queue>['columns'] = [
     },
     {
         title: 'Nguồn cấp',
-        key: 'detail',
-        render: (_, record) => (<Link to={`/dich-vu/chi-tiet/${record.code}`}><Button type="link"
-                                                                                      style={{textDecorationLine: 'underline'}}>Chi
-            tiết</Button></Link>),
+        dataIndex: 'issueSource',
+        key: 'report_issueSource',
     },
 ];
 
 const ReportPage = () => {
-    const [startDate, setStartDate] = useState<Date | undefined>();
-    const [endDate, setEndDate] = useState<Date | undefined>(new Date());
+    const [queues, setQueues] = useState<Queue[]>([]);
+    const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().startOf('month'));
+    const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
+
+    const loadQueues = useSingleAsync(getQueues);
+
+    useEffect(() => {
+        loadQueues.execute({}).then(setQueues).catch(() => setQueues([]));
+    }, []);
+
+    const handleDateChange = (start: Dayjs | null, end: Dayjs | null) => {
+        setStartDate(start);
+        setEndDate(end);
+    };
+
     return (
         <div>
             <Flex style={{padding: '2.4rem'}} align="center" justify="space-between">
@@ -74,16 +91,14 @@ const ReportPage = () => {
                     <Flex vertical gap={4}>
                         <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}}
                                htmlFor="connected">Chọn thời gian</label>
-                        <DateRangePicker onChangeStartDate={(date) => setStartDate(date)} endDate={endDate}
-                                         startDate={startDate}
-                                         onChangeEndDate={(date) => setEndDate(date)}/>
+                        <RangePicker start={startDate} end={endDate} onChange={handleDateChange}/>
                     </Flex>
                 </Flex>
-                <Table bordered columns={columns}/>;
+                <Table bordered columns={columns} dataSource={queues} rowKey={record => record.id}/>;
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconDocumentDownload/>} href="/dich-vu/them">Tải về</ActionButton.Item>
+                <ActionButton.Item icon={<IconDocumentDownload/>}>Tải về</ActionButton.Item>
             </ActionButton>
         </div>
     );

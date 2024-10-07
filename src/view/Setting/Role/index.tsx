@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {IconSquarePlus} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
 import {Flex, Form, TableProps, Typography} from "antd";
@@ -11,28 +11,29 @@ import ButtonLink from "@shared/components/ButtonLink";
 import {useSingleAsync} from "@shared/hook/useAsync";
 import {getRoles} from "@modules/roles/repository";
 import {Role} from "@modules/roles/interface";
+import useDebounce from "@shared/hook/useDebounce";
 
 const columns: TableProps<Role>['columns'] = [
     {
         title: 'Tên vai trò',
         dataIndex: 'name',
-        key: 'name',
+        key: 'role_name',
     },
     {
         title: 'Số người dùng',
         dataIndex: 'userCount',
-        key: 'userCount',
+        key: 'role_userCount',
     },
     {
         title: 'Mô tả',
         dataIndex: 'description',
-        key: 'description',
+        key: 'role_description',
     },
     {
         title: '',
-        key: 'update',
+        key: 'role_update',
         render: (_, record) => (
-            <Link to={`/cai-dat/quan-ly-vai-tro/${record.code}/cap-nhat`}>
+            <Link to={`/admin/cai-dat/quan-ly-vai-tro/${record.code}/cap-nhat`}>
                 <ButtonLink>
                     Cập nhật
                 </ButtonLink>
@@ -40,14 +41,32 @@ const columns: TableProps<Role>['columns'] = [
     },
 ];
 
-const RoleAddPage = () => {
+const RolePage = () => {
+    const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [roles, setRoles] = useState<Role[]>([]);
+    const [filteredRoles, setFilteredRoles] = useState<Role[]>([]);
+    const debouncedSearchKeyword = useDebounce(searchKeyword, 300);
 
     const loadRoles = useSingleAsync(getRoles);
 
     useEffect(() => {
         loadRoles.execute().then(setRoles).catch(() => setRoles([]));
     }, []);
+
+    const filterRoles = useCallback((keyword: string) => {
+        const filtered = roles.filter(role => role.name.toLowerCase().includes(keyword.toLowerCase()));
+        setFilteredRoles(filtered);
+    }, [roles]);
+
+    useEffect(() => {
+        filterRoles(debouncedSearchKeyword);
+    }, [debouncedSearchKeyword, filterRoles]);
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            filterRoles(e.currentTarget.value);
+        }
+    };
 
     return (
         <div>
@@ -72,19 +91,24 @@ const RoleAddPage = () => {
                 <Form layout="vertical">
                     <Flex justify="end">
                         <Form.Item label="Từ khóa">
-                            <Input style={{width: '30rem'}} id="search" placeholder="Nhập từ khóa"/>
+                            <Input style={{width: '30rem'}} id="search" name="search"
+                                   placeholder="Nhập từ khóa"
+                                   value={searchKeyword}
+                                   onKeyDown={handleKeyDown}
+                                   onChange={(e) => setSearchKeyword(e.target.value)}
+                            />
                         </Form.Item>
                     </Flex>
                 </Form>
-                <Table bordered columns={columns} dataSource={roles}/>;
+                <Table bordered columns={columns} dataSource={filteredRoles} rowKey={(record) => record.id}/>;
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconSquarePlus/>} href="/cai-dat/quan-ly-vai-tro/them-moi">Thêm<br/> vai
+                <ActionButton.Item icon={<IconSquarePlus/>} href="/admin/cai-dat/quan-ly-vai-tro/them-moi">Thêm<br/> vai
                     trò</ActionButton.Item>
             </ActionButton>
         </div>
     );
 };
 
-export default RoleAddPage;
+export default RolePage;

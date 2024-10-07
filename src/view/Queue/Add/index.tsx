@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Flex, Form, Modal, Typography} from "antd";
+import {Button, Flex, Form, Typography} from "antd";
 import TopBar from "@shared/components/TopBar";
 import Card from "@shared/components/Card";
 import Select from "@shared/components/Select";
@@ -8,19 +8,25 @@ import Breadcrumb from "@shared/components/Breadcrumb";
 import {Service} from "@modules/services/interface";
 import {useSingleAsync} from "@shared/hook/useAsync";
 import {getServices} from "@modules/services/repository";
+import ModalAddQueue from "@view/Queue/Add/components/ModalAddQueue";
 
 const QueueAddPage = () => {
     const [form] = Form.useForm();
     const [isShowQueueInfo, setIsShowQueueInfo] = useState<boolean>(false);
     const [services, setServices] = useState<Service[]>([]);
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
     const loadServices = useSingleAsync(getServices);
 
     useEffect(() => {
         loadServices.execute('ACTIVE').then(setServices).catch(() => setServices([]));
     }, []);
 
-    const handleSubmit = () => {
-        setIsShowQueueInfo(true);
+    const handleSubmit = (values: {service: string}) => {
+        const service = services.find(service => service.id === values.service);
+        if (service) {
+            setSelectedService(service);
+            setIsShowQueueInfo(true);
+        }
     };
 
     return (
@@ -34,7 +40,7 @@ const QueueAddPage = () => {
                             },
                             {
                                 title: 'Danh sách cấp số',
-                                href: '/cap-so'
+                                href: '/admin/cap-so'
                             },
                             {
                                 title: 'Cấp số mới'
@@ -49,8 +55,8 @@ const QueueAddPage = () => {
                     <Card>
                         <Form
                             form={form}
-                            onFinish={handleSubmit}
                             layout="vertical"
+                            onFinish={handleSubmit}
                         >
                             <Flex justify="center" align="center" vertical gap="middle">
                                 <Typography.Title level={2} style={{marginBottom: '1.6rem', fontSize: '3.2rem'}}>CẤP SỐ
@@ -69,28 +75,23 @@ const QueueAddPage = () => {
                                     >
                                         {
                                             services.map((service: Service) => (
-                                                <Select.Option key={service.code}>{service.name}</Select.Option>
+                                                <Select.Option key={service.id}>{service.name}</Select.Option>
                                             ))
                                         }
                                     </Select>
                                 </Form.Item>
 
                                 <Flex justify="center" gap="large">
-                                    <Link to="/cap-so"><Button style={{backgroundColor: '#FFF2E7'}} htmlType="button"
+                                    <Link to="/admin/cap-so"><Button style={{backgroundColor: '#FFF2E7'}} htmlType="button"
                                                                type="primary"
                                                                size="large" ghost>Hủy bỏ</Button></Link>
-                                    <Button htmlType="submit" type="primary" size="large">In số</Button>
+                                    <ModalAddQueue isShow={isShowQueueInfo} setIsShow={setIsShowQueueInfo} service={selectedService}/>
                                 </Flex>
                             </Flex>
                         </Form>
                     </Card>
                 </div>
             </div>
-            <Modal open={isShowQueueInfo}
-                   onCancel={() => setIsShowQueueInfo(false)}
-            >
-                dfd
-            </Modal>
         </>
     );
 };

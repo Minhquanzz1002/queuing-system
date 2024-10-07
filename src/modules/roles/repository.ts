@@ -4,8 +4,9 @@ import {Role} from "@modules/roles/interface";
 
 const rolesRef = collection(db, 'roles');
 
-export const getRoles = async (): Promise<Role[]> => {
-    const q = query(rolesRef, orderBy('name', 'asc'));
+export const getRoles = async (role?: string): Promise<Role[]> => {
+    const conditions = role ? [where('role', '==', role)] : [];
+    const q = query(rolesRef, ...conditions, orderBy('name', 'asc'));
 
     const roleSnapshots = await getDocs(q);
     return roleSnapshots.docs.map(doc => {

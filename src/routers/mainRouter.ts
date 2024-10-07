@@ -22,8 +22,9 @@ import {newQueueNumberRouter} from "@view/Queue/Add/router";
 import {notFoundRouter} from "@view/NotFound/router";
 import {userLogSettingRouter} from "@view/Setting/UserLog/router";
 import {queueDetailRouter} from "@view/Queue/Detail/router";
+import {kioskQueueRouter} from "@view/Kiosk/Queue/router";
 
-export const privatePage : IRouter[] = [
+export const adminRoutes : IRouter[] = [
     dashboardRouter,
     profileRouter,
     deviceRouter,
@@ -46,7 +47,15 @@ export const privatePage : IRouter[] = [
     userUpdateRouter,
     notFoundRouter,
 ];
-export const publicPage : IRouter[] = [
+export const publicRoutes : IRouter[] = [
     loginRouter,
     forgotPasswordRouter,
+];
+
+export const kioskRoutes : IRouter[] = [
+    kioskQueueRouter,
+];
+
+export const otherRoutes : IRouter[] = [
+    notFoundRouter
 ];

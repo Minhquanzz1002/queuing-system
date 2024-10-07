@@ -3,8 +3,18 @@ import "./styles.scss";
 import {loginBg, logo} from "@assets/images";
 import {Button, Flex, Form, Input} from "antd";
 import {Link} from "react-router-dom";
+import {ILoginDTO} from "@modules/authentication/interface";
+import {useSingleAsync} from "@shared/hook/useAsync";
+import {login} from "@modules/authentication/repository";
 
 const Login = () => {
+    const [form] = Form.useForm();
+    const loginCall = useSingleAsync(login);
+
+    const handleLogin = (values: ILoginDTO) => {
+        loginCall.execute(values).then(res => console.log(res));
+    };
+
     return (
         <div className="login">
             <div className="login__left">
@@ -12,11 +22,13 @@ const Login = () => {
                     <img src={logo} alt="Logo"/>
                 </div>
                 <Form
+                    form={form}
                     className="login__form"
                     layout="vertical"
+                    onFinish={handleLogin}
                     requiredMark={false}
                 >
-                    <Form.Item style={{marginBottom: '1.6rem'}} required label="Tên đăng nhập *" name="username"
+                    <Form.Item style={{marginBottom: '1.6rem'}} required label="Tên đăng nhập" name="username"
                                rules={[
                                    {
                                        required: true,
@@ -24,9 +36,9 @@ const Login = () => {
                                    }
                                ]}
                     >
-                        <Input autoFocus placeholder="Tên đăng nhập"/>
+                        <Input size="large" autoFocus placeholder="Tên đăng nhập"/>
                     </Form.Item>
-                    <Form.Item style={{marginBottom: 0}} required label="Mật khẩu *" name="password"
+                    <Form.Item style={{marginBottom: 0}} required label="Mật khẩu" name="password"
                                rules={[
                                    {
                                        required: true,
@@ -34,8 +46,10 @@ const Login = () => {
                                    }
                                ]}
                     >
-                        <Input.Password id="password" placeholder="Mật khẩu"/>
+                        <Input.Password size="large" placeholder="Mật khẩu"/>
                     </Form.Item>
+
+
 
                     <Form.Item style={{marginBottom: 0}}>
                         <Link to={"/auth/forgot"}>

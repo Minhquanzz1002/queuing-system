@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Flex, Layout, Menu, MenuProps} from "antd";
 import Sider from "antd/es/layout/Sider";
 import {logo} from "@assets/images";
@@ -13,7 +13,7 @@ import {
 } from "@assets/icons";
 import {MoreOutlined} from "@ant-design/icons";
 import {Content} from "antd/es/layout/layout";
-import {Link, useLocation} from "react-router-dom";
+import {Link, Outlet, useLocation} from "react-router-dom";
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -24,15 +24,15 @@ const getItem = (label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 };
 
 const items: MenuItem[] = [
-    getItem(<Link to="/dashboard">Dashboard</Link>, '/dashboard', <IconElement/>),
-    getItem(<Link to="/thiet-bi">Thiết bị</Link>, '/thiet-bi', <IconMonitor/>),
-    getItem(<Link to="/dich-vu">Dịch vụ</Link>, '/dich-vu', <IconChat/>),
-    getItem(<Link to="/cap-so">Cấp số</Link>, '/cap-so', <IconLayer/>),
-    getItem(<Link to="/bao-cao">Báo cáo</Link>, '/bao-cao', <IconDocumentReport/>),
+    getItem(<Link to="/admin/dashboard">Dashboard</Link>, '/dashboard', <IconElement/>),
+    getItem(<Link to="/admin/thiet-bi">Thiết bị</Link>, '/thiet-bi', <IconMonitor/>),
+    getItem(<Link to="/admin/dich-vu">Dịch vụ</Link>, '/dich-vu', <IconChat/>),
+    getItem(<Link to="/admin/cap-so">Cấp số</Link>, '/cap-so', <IconLayer/>),
+    getItem(<Link to="/admin/bao-cao">Báo cáo</Link>, '/bao-cao', <IconDocumentReport/>),
     getItem('Cài đặt hệ thống', '/cai-dat', <IconSetting/>, [
-        getItem(<Link to="/cai-dat/quan-ly-vai-tro">Quản lý vai trò</Link>, '/cai-dat/quan-ly-vai-tro'),
-        getItem(<Link to="/cai-dat/quan-ly-tai-khoan">Quản lý tài khoản</Link>, '/cai-dat/quan-ly-tai-khoan'),
-        getItem(<Link to="/cai-dat/nhat-ky-nguoi-dung">Nhật ký người dùng</Link>, '/cai-dat/nhat-ky-nguoi-dung'),
+        getItem(<Link to="/admin/cai-dat/quan-ly-vai-tro">Quản lý vai trò</Link>, '/cai-dat/quan-ly-vai-tro'),
+        getItem(<Link to="/admin/cai-dat/quan-ly-tai-khoan">Quản lý tài khoản</Link>, '/cai-dat/quan-ly-tai-khoan'),
+        getItem(<Link to="/admin/cai-dat/nhat-ky-nguoi-dung">Nhật ký người dùng</Link>, '/cai-dat/nhat-ky-nguoi-dung'),
     ]),
 ];
 
@@ -50,13 +50,13 @@ const contentStyle: React.CSSProperties = {
     position: 'relative'
 };
 
-const DefaultLayout: React.FC<PropsWithChildren> = props => {
+const AdminLayout: React.FC = () => {
     const location = useLocation();
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
     useEffect(() => {
         const pathSnippets = location.pathname.split('/').filter(i => i);
-        setSelectedKeys(['/' + pathSnippets[0]]);
+        setSelectedKeys(['/' + pathSnippets[1]]);
     }, [location]);
 
     return (
@@ -81,11 +81,11 @@ const DefaultLayout: React.FC<PropsWithChildren> = props => {
             </Sider>
             <Layout style={{marginLeft: '20rem'}}>
                 <Content style={contentStyle}>
-                    {props.children}
+                    <Outlet/>
                 </Content>
             </Layout>
         </Layout>
     );
 };
 
-export default DefaultLayout;
+export default AdminLayout;

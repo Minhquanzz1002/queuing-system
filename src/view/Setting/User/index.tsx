@@ -14,39 +14,38 @@ import Select from "@shared/components/Select";
 import {User} from "@modules/users/interface";
 import {getUsers} from "@modules/users/repository";
 import {getRoles} from "@modules/roles/repository";
-import {Option} from "antd/es/mentions";
 
 const columns: TableProps<User>['columns'] = [
     {
         title: 'Tên đăng nhập',
         dataIndex: 'username',
-        key: 'username',
+        key: 'user_username',
     },
     {
         title: 'Họ tên',
         dataIndex: 'name',
-        key: 'name',
+        key: 'user_name',
     },
     {
         title: 'Số điện thoại',
         dataIndex: 'phone',
-        key: 'phone',
+        key: 'user_phone',
     },
     {
         title: 'Email',
         dataIndex: 'email',
-        key: 'email',
+        key: 'user_email',
     },
     {
         title: 'Vai trò',
         dataIndex: 'role',
-        key: 'role',
+        key: 'user_role',
         render: (role: Role) => role.name
     },
     {
         title: 'Trạng thái hoạt động',
         dataIndex: 'status',
-        key: 'status',
+        key: 'user_status',
         render: (status) => (
             <>
                 {
@@ -63,9 +62,9 @@ const columns: TableProps<User>['columns'] = [
     },
     {
         title: '',
-        key: 'update',
+        key: 'user_update',
         render: (_, record) => (
-            <Link to={`/cai-dat/quan-ly-tai-khoan/${record.username}/cap-nhat`}>
+            <Link to={`/admin/cai-dat/quan-ly-tai-khoan/${record.username}/cap-nhat`}>
                 <ButtonLink>
                     Cập nhật
                 </ButtonLink>
@@ -73,9 +72,14 @@ const columns: TableProps<User>['columns'] = [
     },
 ];
 
+type Filters = {
+    role: string;
+}
+
 const UserManagementSettingPage = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [roles, setRoles] = useState<Role[]>([]);
+    const [filters, setFilters] = useState<Filters>({role: 'all'});
 
     const loadUsers = useSingleAsync(getUsers);
     const loadRoles = useSingleAsync(getRoles);
@@ -84,6 +88,16 @@ const UserManagementSettingPage = () => {
         loadUsers.execute().then(setUsers).catch(() => setUsers([]));
         loadRoles.execute().then(setRoles).catch(() => setRoles([]));
     }, []);
+
+    useEffect(() => {
+        const {role} = filters;
+        const roleFilter = role === 'all' ? undefined : role;
+        loadUsers.execute(roleFilter).then(setUsers).catch(() => setUsers([]));
+    }, [filters]);
+
+    const onFiltersChange = (_changeValues: any, allValues: Filters) => {
+        setFilters(allValues);
+    };
 
     return (
         <div>
@@ -104,16 +118,15 @@ const UserManagementSettingPage = () => {
             <div style={{paddingLeft: '2.4rem', paddingRight: '10.4rem'}}>
                 <Typography.Title level={3} style={{color: '#FF7506', marginBottom: '1.6rem'}}>Danh sách tài
                     khoản</Typography.Title>
-                <Form layout="vertical">
+                <Form layout="vertical" initialValues={filters} onValuesChange={onFiltersChange}>
                     <Flex justify="space-between">
                         <Flex vertical gap={4}>
-                            <Form.Item label="Tên vai trò">
-                                <Select style={{width: '30rem'}}
-                                        defaultValue=""
-                                >
-                                    <Option key="">Tất cả</Option>
+                            <Form.Item label="Tên vai trò" name="role">
+                                <Select style={{width: '30rem'}}>
+                                    <Select.Option key="all">Tất cả</Select.Option>
                                     {
-                                        roles.map((role: Role) => <Option key={role.id} value={role.name}></Option>)
+                                        roles.map((role: Role) => <Select.Option
+                                            key={role.id}>{role.name}</Select.Option>)
                                     }
                                 </Select>
                             </Form.Item>
@@ -126,11 +139,11 @@ const UserManagementSettingPage = () => {
                         </Flex>
                     </Flex>
                 </Form>
-                <Table bordered columns={columns} dataSource={users}/>;
+                <Table bordered columns={columns} dataSource={users} rowKey={record => record.id}/>;
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconSquarePlus/>} href="/cai-dat/quan-ly-tai-khoan/them-moi">Thêm<br/> tài
+                <ActionButton.Item icon={<IconSquarePlus/>} href="/admin/cai-dat/quan-ly-tai-khoan/them-moi">Thêm<br/> tài
                     khoản</ActionButton.Item>
             </ActionButton>
         </div>
