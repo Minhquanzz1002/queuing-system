@@ -10,8 +10,8 @@
   };
 
   &__doughnut-chart {
-    height: 6rem;
-    width: 6rem;
+    height: 6.5rem;
+    width: 6.5rem;
     position: relative;
     font: {
       size: 1.4rem;
@@ -20,40 +20,10 @@
     line-height: 2.4rem;
     color: $gray400;
 
-    &--1 {
+    &-item {
       position: absolute;
       inset: 0;
-
-      &--orange {
-        color: $orange500;
-      }
-
-      &--blue {
-        color: blue;
-      }
-
-      &--green {
-        color: rgba(53, 199, 90, 1);
-      }
     }
-
-    &--2 {
-      position: absolute;
-      padding: 0.6rem;
-      inset: 0;
-    }
-  }
-
-  &--orange {
-    color: $orange500;
-  }
-
-  &--blue {
-    color: blue;
-  }
-
-  &--green {
-    color: rgba(53, 199, 90, 1);
   }
 
   &__total {
@@ -90,18 +60,6 @@
     height: 0.4rem;
     width: 0.4rem;
     border-radius: 50%;
-
-    &--orange {
-      background-color: $orange500;
-    }
-
-    &--blue {
-      background-color: blue;
-    }
-
-    &--green {
-      background-color: rgba(53, 199, 90, 1);
-    }
   }
 
   &__status-value {

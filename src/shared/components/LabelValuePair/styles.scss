@@ -1,0 +1,16 @@
+@import "../../../view/styles/variable";
+
+.label-value-pair {
+
+  &__label-text {
+    font-size: 1.6rem;
+    color: $gray500;
+    line-height: 2.4rem;
+  }
+
+  &__value-text {
+    font-size: 1.6rem;
+    color: $gray400;
+    line-height: 2.4rem;
+  }
+}

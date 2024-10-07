@@ -11,10 +11,10 @@ const TopBar = () => {
                 <IconBell/>
             </Button>
             <Flex gap="small" className="topbar__user">
-                <Link to="/ho-so"><Avatar size={40} className="topbar__avatar">A</Avatar></Link>
+                <Link to="/admin/ho-so"><Avatar size={40} className="topbar__avatar">A</Avatar></Link>
                 <Flex vertical className="topbar__info">
                     <div className="topbar__greeting">Xin chào</div>
-                    <Link to="/ho-so">
+                    <Link to="/admin/ho-so">
                         <div className="topbar__username">Nguyễn Minh Quân</div>
                     </Link>
                 </Flex>

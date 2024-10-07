@@ -1,96 +1,106 @@
 import React, {useEffect, useState} from 'react';
-import {Col, Flex, Row, Spin, Typography} from "antd";
-import {IconSquarePlus} from "@assets/icons";
+import {Col, Flex, Row, Typography} from "antd";
+import {IconBackSquare, IconCircle} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
 import ActionButton from "src/shared/components/ActionButton";
-import {Device} from "@modules/devices/interface";
 import "./styles.scss";
 import Card from "@shared/components/Card";
 import Breadcrumb from "@shared/components/Breadcrumb";
 import {useSingleAsync} from "@shared/hook/useAsync";
-import {getDeviceByCode} from "@modules/devices/repository";
 import {useParams} from "react-router-dom";
 import NotFound from "@shared/components/NotFound";
+import {Queue} from "@modules/queue/interface";
+import {getQueueById} from "@modules/queue/repository";
+import LabelValuePair from "@shared/components/LabelValuePair";
+import {formatDateTime} from "@helper/functions";
+import Loader from "@shared/components/Loader";
 
-const InfoItem = ({label, value}: { label: string; value: string }) => (
-    <Col span={12} className="device-detail__info-item">
-        <div className="device-detail__info-label">{label}</div>
-        <div className="device-detail__info-value">{value}</div>
-    </Col>
-);
+const renderStatus = (status: Queue['status']) => {
+    if (status === 'USED') {
+        return <Flex gap="small" align="center"><IconCircle style={{color: '#7E7D88'}}/>Đã sử dụng</Flex>;
+    }
+    if (status === 'WAITING') {
+        return <Flex gap="small" align="center"><IconCircle style={{color: '#4277FF'}}/>Đang chờ</Flex>;
+    }
+    return <Flex gap="small" align="center"><IconCircle style={{color: '#F9A825'}}/>Đã bỏ qua</Flex>;
+};
 
-const DeviceDetailPage = () => {
-    const {code} = useParams<{ code: string }>();
-    const [device, setDevice] = useState<Device | null>(null);
-    const loadDevice = useSingleAsync(getDeviceByCode);
+const QueueDetailPage = () => {
+    const {id} = useParams<{ id: string }>();
+    const [queue, setQueue] = useState<Queue | null>(null);
+    const loadDevice = useSingleAsync(getQueueById);
 
     useEffect(() => {
-        if (code) {
-            loadDevice.execute(code).then(setDevice).catch(() => setDevice(null));
+        if (id) {
+            loadDevice.execute(id).then(setQueue).catch(() => setQueue(null));
         }
-    }, [code]);
+    }, [id]);
 
     if (loadDevice.status === "loading") {
-        return (
-            <Flex align="center" justify="center" className="h-100vh">
-                <Spin size="large" />
-            </Flex>
-        );
+        return <Loader/>;
     }
 
-    if (!device) {
+    if (!queue) {
         return <NotFound/>;
     }
 
     return (
-        <div className="device-detail">
+        <div className="queue-detail">
             <Flex style={{padding: '2.4rem'}} align="center" justify="space-between">
                 <Breadcrumb
                     items={[
                         {
-                            title: 'Thiết bị'
+                            title: 'Cấp số'
                         },
                         {
-                            title: 'Danh sách thiết bị',
-                            href: '/thiet-bi'
+                            title: 'Danh sách cấp số',
+                            href: '/admin/cap-so'
                         },
                         {
-                            title: 'Chi tiết thiết bị'
+                            title: 'Chi tiết'
                         }
                     ]}
                 />
                 <TopBar/>
             </Flex>
 
-            <div className="device-detail__content">
-                <Typography.Title level={3} style={{marginBottom: '1.6rem'}}>Quản lý thiết
-                    bị</Typography.Title>
+            <div className="queue-detail__content">
+                <Typography.Title level={3} style={{marginBottom: '1.6rem'}}>
+                    Quản lý cấp số
+                </Typography.Title>
 
                 <Card>
-                    <Typography.Title level={4} style={{marginBottom: '1.6rem'}}>Thông tin thiết
-                        bị</Typography.Title>
+                    <Typography.Title level={4} style={{marginBottom: '1.6rem'}}>
+                        Thông tin cấp số
+                    </Typography.Title>
 
-                    <Row gutter={[16, 16]} className="device-detail__info-grid">
-                        <InfoItem label="Mã thiết bị:" value={device.code}/>
-                        <InfoItem label="Loại thiết bị:" value={device.type}/>
-                        <InfoItem label="Tên thiết bị:" value={device.name}/>
-                        <InfoItem label="Tên đăng nhập:" value={device.username}/>
-                        <InfoItem label="Địa chỉ IP:" value={device.ip}/>
-                        <InfoItem label="Mật khẩu:" value={device.password}/>
+                    <Row>
+                        <Col span={12}>
+                            <Flex vertical gap="1.6rem">
+                                <LabelValuePair label="Họ tên:" value={queue.customer.name}/>
+                                <LabelValuePair label="Tên dịch vụ:" value={queue.service.name}/>
+                                <LabelValuePair label="Số thứ tự:" value={queue.serialNumber}/>
+                                <LabelValuePair label="Thời gian cấp:" value={formatDateTime(queue.issueTime)}/>
+                                <LabelValuePair label="Hạn sử dụng:" value={formatDateTime(queue.expiryDate)}/>
+                            </Flex>
+                        </Col>
+                        <Col span={12}>
+                            <Flex vertical gap="1.6rem">
+                                <LabelValuePair label="Nguồn cấp:" value={queue.issueSource}/>
+                                <LabelValuePair label="Trạng thái:" value={renderStatus(queue.status)}/>
+                                <LabelValuePair label="Số điện thoại:" value={queue.customer.phone}/>
+                                <LabelValuePair label="Địa chỉ email:" value={queue.customer.email}/>
+                            </Flex>
+                        </Col>
                     </Row>
-
-                    <div>
-                        <div className="device-detail__info-label">Dịch vụ sử dụng:</div>
-                        <div className="device-detail__info-value">{device.services.join(', ')}</div>
-                    </div>
                 </Card>
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconSquarePlus/>} href={`/thiet-bi/${device.code}/cap-nhat`}>Cập nhật<br/> thiết bị</ActionButton.Item>
+                <ActionButton.Item icon={<IconBackSquare/>} href={`/admin/cap-so`}>Quay lại</ActionButton.Item>
             </ActionButton>
         </div>
     );
 };
 
-export default DeviceDetailPage;
+export default QueueDetailPage;

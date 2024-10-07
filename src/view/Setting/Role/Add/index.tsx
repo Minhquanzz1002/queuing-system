@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, Flex, Form, message, Typography} from "antd";
 import TopBar from "@shared/components/TopBar";
-import "./styles.scss";
 import Card from "@shared/components/Card";
 import {Link, useNavigate} from "react-router-dom";
 import Breadcrumb from "@shared/components/Breadcrumb";
@@ -30,7 +29,7 @@ const DeviceAddPage = () => {
             });
 
             message.success("Vai trò đã được thêm thành công", 5);
-            navigate("/cai-dat/quan-ly-vai-tro");
+            navigate("/admin/cai-dat/quan-ly-vai-tro");
         } catch (error) {
             message.error("Đã có lỗi xảy ra. Hãy thử lại sau!", 5);
             console.error(error);
@@ -47,7 +46,7 @@ const DeviceAddPage = () => {
                         },
                         {
                             title: 'Quản lý vai trò',
-                            href: '/cai-dat/quan-ly-vai-tro'
+                            href: '/admin/cai-dat/quan-ly-vai-tro'
                         },
                         {
                             title: 'Thêm vai trò'
@@ -65,15 +64,18 @@ const DeviceAddPage = () => {
                     layout="vertical"
                 >
                     <Card>
-                        <Typography.Title level={4} style={{marginBottom: '1.6rem'}}>Thông tin vai trò</Typography.Title>
+                        <Typography.Title level={4} style={{marginBottom: '1.6rem'}}>Thông tin vai
+                            trò</Typography.Title>
                         <FormRole/>
                     </Card>
 
                     <Flex justify="center" gap="large">
-                        <Link to="/cai-dat/quan-ly-vai-tro"><Button style={{backgroundColor: '#FFF2E7'}} htmlType="button"
-                                                     type="primary"
-                                                     size="large" ghost>Hủy bỏ</Button></Link>
-                        <Button disabled={addDeviceCall.status === "loading"} htmlType="submit" type="primary" size="large">Thêm</Button>
+                        <Link to="/admin/cai-dat/quan-ly-vai-tro"><Button style={{backgroundColor: '#FFF2E7'}}
+                                                                          htmlType="button"
+                                                                          type="primary"
+                                                                          size="large" ghost>Hủy bỏ</Button></Link>
+                        <Button disabled={addDeviceCall.status === "loading"} htmlType="submit" type="primary"
+                                size="large">Thêm</Button>
                     </Flex>
                 </Form>
             </div>

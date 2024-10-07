@@ -27,7 +27,7 @@ const ForgotPassword = () => {
                         >
                             <div className="forgot__form--title">Đặt lại mật khẩu</div>
 
-                            <Form.Item label="Vui lòng nhập email để đặt lại mật khẩu của bạn *" name="username"
+                            <Form.Item label="Vui lòng nhập email để đặt lại mật khẩu của bạn" name="username"
                                        rules={[
                                            {
                                                required: true,
@@ -39,7 +39,7 @@ const ForgotPassword = () => {
                                            }
                                        ]}
                             >
-                                <Input autoFocus/>
+                                <Input size="large" autoFocus/>
                             </Form.Item>
 
                             <Flex justify="center" gap="middle">

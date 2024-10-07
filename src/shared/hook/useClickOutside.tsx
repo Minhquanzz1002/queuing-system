@@ -1,14 +1,10 @@
 import React, {useCallback, useEffect} from "react";
 type Event =  MouseEvent | TouchEvent;
 
-// eslint-disable-next-line no-unused-vars
 const useClickOutside = <T extends  HTMLElement> (ref: React.RefObject<T>, onClickOutside: (e: Event) => void) => {
     const handleClickOutside = useCallback(
         (event: Event) => {
-            console.log("click");
-
             if (event && ref.current && !ref.current.contains(event.target as Node)) {
-                console.log("event");
                 onClickOutside(event);
             }
         },
@@ -16,8 +12,11 @@ const useClickOutside = <T extends  HTMLElement> (ref: React.RefObject<T>, onCli
     );
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside, true);
-        document.addEventListener('touchstart', handleClickOutside, true);
+        const handleMouseDown = (e: MouseEvent) => handleClickOutside(e);
+        const handleTouchStart = (e: TouchEvent) => handleClickOutside(e);
+
+        document.addEventListener('mousedown', handleMouseDown, true);
+        document.addEventListener('touchstart', handleTouchStart, true);
 
         return  () => {
             document.removeEventListener('mousedown', handleClickOutside, true);

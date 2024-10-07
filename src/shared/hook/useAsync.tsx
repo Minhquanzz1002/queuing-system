@@ -6,7 +6,6 @@ export interface IState<T> {
     error: any;
 }
 
-// eslint-disable-next-line no-unused-vars
 export const useSingleAsync = <T = any>(asyncFunction: (...params: any[]) => Promise<T>) => {
     const [state, setState] = useState<IState<T>>({
         value: undefined,
