@@ -1,9 +1,10 @@
-import React, {PropsWithChildren} from 'react';
+import React from 'react';
+import {Outlet} from 'react-router-dom';
 
-const EmptyLayout: React.FC<PropsWithChildren> = props => {
+const EmptyLayout: React.FC = () => {
     return (
         <div>
-            {props.children}
+            <Outlet/>
         </div>
     );
 };

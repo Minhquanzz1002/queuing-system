@@ -1,16 +1,13 @@
-import React, {memo} from 'react';
+import React from 'react';
 import "@styles/styles.scss";
-import {PublicPage} from "@routers/component/PublicPage";
 import {ConfigProvider} from "antd";
-import {PrivatePage} from "@routers/component/PrivatePage";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
-
-const MainView = memo(({statusLogin}: { statusLogin: boolean }) => {
-    return (<>{statusLogin ? <PrivatePage/> : <PublicPage/>}</>);
-});
+import isBetween from 'dayjs/plugin/isBetween';
+import AppRouter from "@routers/index";
 
 dayjs.extend(relativeTime);
+dayjs.extend(isBetween);
 
 function App() {
     return (
@@ -50,7 +47,7 @@ function App() {
                 },
             }}
         >
-            <MainView statusLogin={true}/>
+            <AppRouter/>
         </ConfigProvider>
     );
 }

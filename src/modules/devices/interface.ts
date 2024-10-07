@@ -1,3 +1,5 @@
+import {Service} from "@modules/services/interface";
+
 export interface Device {
     id: string;
     code: string;
@@ -5,7 +7,7 @@ export interface Device {
     ip: string;
     status: 'ACTIVE' | 'INACTIVE';
     connected: boolean;
-    services: string[];
+    services: Service[];
     username: string;
     password: string;
     type: string;

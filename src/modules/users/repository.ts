@@ -1,4 +1,4 @@
-import {collection, doc, getDoc, getDocs, limit, orderBy, query, where} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, limit, orderBy, query, where, addDoc, updateDoc} from "firebase/firestore";
 import {db} from "@config/firebaseConfig";
 import {User} from "@modules/users/interface";
 import {Role} from "@modules/roles/interface";
@@ -6,8 +6,9 @@ import {Role} from "@modules/roles/interface";
 const usersRef = collection(db, 'users');
 const rolesRef = collection(db, 'roles');
 
-export const getUsers = async (): Promise<User[]> => {
-    const q = query(usersRef, orderBy('name', 'asc'));
+export const getUsers = async (roleId?: string): Promise<User[]> => {
+    const conditions = roleId ? [where('role', '==', doc(rolesRef, roleId))] : [];
+    const q = query(usersRef, ...conditions,orderBy('name', 'asc'));
 
     const userSnapshots = await getDocs(q);
     return await Promise.all(userSnapshots.docs.map(async docSnapshot => {
@@ -61,5 +62,33 @@ export const getUserByUsername = async (username: string): Promise<User | null> 
     } else {
         return null;
     }
+};
 
+export const addUser = async (user: Omit<User, 'id' | 'role'> & {role: string}) => {
+    try {
+        const userWithRoleRef = {
+            ...user,
+            role: doc(rolesRef, user.role),
+        };
+        const docRef = await addDoc(usersRef, userWithRoleRef);
+        return docRef.id;
+    } catch (error) {
+        console.error('Error adding user: ', error);
+        throw new Error("Unable to add a user");
+    }
+};
+
+export const updateUser = async (id: string, updatedData: Partial<Omit<User, 'role'>> & {role?: string}) => {
+    try {
+        const userDocRef = doc(db, 'users', id);
+        if (updatedData.role) {
+            const roleUpdate = doc(rolesRef, updatedData.role);
+            await updateDoc(userDocRef, {...updatedData, role: roleUpdate});
+        } else {
+            await updateDoc(userDocRef, updatedData);
+        }
+    } catch (error) {
+        console.error('Error updating user: ', error);
+        throw new Error("Unable to update the user");
+    }
 };

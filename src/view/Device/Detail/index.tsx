@@ -52,7 +52,7 @@ const DeviceDetailPage = () => {
                         },
                         {
                             title: 'Danh sách thiết bị',
-                            href: '/thiet-bi'
+                            href: '/admin/thiet-bi'
                         },
                         {
                             title: 'Chi tiết thiết bị'
@@ -81,13 +81,13 @@ const DeviceDetailPage = () => {
 
                     <div>
                         <div className="device-detail__info-label">Dịch vụ sử dụng:</div>
-                        <div className="device-detail__info-value">{device.services.join(', ')}</div>
+                        <div className="device-detail__info-value">{device.services.map(service => service.name).join(', ')}</div>
                     </div>
                 </Card>
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconSquarePlus/>} href={`/thiet-bi/${device.code}/cap-nhat`}>Cập nhật<br/> thiết bị</ActionButton.Item>
+                <ActionButton.Item icon={<IconSquarePlus/>} href={`/admin/thiet-bi/${device.code}/cap-nhat`}>Cập nhật<br/> thiết bị</ActionButton.Item>
             </ActionButton>
         </div>
     );

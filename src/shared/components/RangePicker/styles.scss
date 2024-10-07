@@ -1,0 +1,93 @@
+@import "../../../view/styles/variable";
+
+.range-picker {
+  width: 32rem;
+  position: relative;
+
+  &__calendar {
+    background: white;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    box-shadow: 0 0 6px 0 #E7E9F2;
+    border-radius: 0.8rem;
+    z-index: 2;
+    padding: 1.6rem;
+
+    &-divider {
+      height: 1px;
+      background: #DCDDFD;
+      margin: {
+        top: 0.8rem;
+        bottom: 0.8rem;
+      };
+    }
+
+    &-header {
+      color: $orange500;
+      font: {
+        size: 1.6rem;
+        weight: 700;
+      };
+
+      button {
+        padding: 1rem;
+
+        &:first-child {
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+      }
+
+
+      svg {
+        color: $orange500;
+      }
+    }
+
+    &-body {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      row-gap: 0.6rem;
+    }
+
+    &-day {
+      height: 3.6rem;
+      cursor: pointer;
+      font: {
+        size: 1.4rem;
+        weight: 600;
+      };
+
+      &--current {
+        color: #535261;
+      }
+
+      &--other-month {
+        color: #7E7D88;
+      }
+
+      &--start, &--end {
+        background: $orange500 !important;
+        color: white;
+        border-radius: 0.8rem;
+      }
+
+      &--in-range {
+        background: $orange50;
+      }
+    }
+
+    &-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      color: $orange400;
+      font: {
+        size: 1.4rem;
+        weight: 700;
+      };
+    }
+  }
+}

@@ -2,6 +2,7 @@ import React, {CSSProperties} from 'react';
 import "./styles.scss";
 import {Flex} from "antd";
 import {IconArrowDownShort, IconArrowUpShort} from "@assets/icons";
+import AnimatedCounter from "@view/Dashboard/components/AnimatedCounter";
 
 type WidgetProps = {
     title: React.ReactNode;
@@ -43,7 +44,9 @@ const Widget = ({title, total, change, icon}: WidgetProps) => {
                 <div className="widget__title">{title}</div>
             </Flex>
             <Flex align="center" justify="space-between" className="widget__content">
-                <div className="widget__total">{total}</div>
+                <div className="widget__total">
+                    <AnimatedCounter end={total} duration={1000}/>
+                </div>
                 <Flex align="center" justify="center" className="widget__change"
                       style={getChangeStyles()}>
                     <ArrowIcon/>

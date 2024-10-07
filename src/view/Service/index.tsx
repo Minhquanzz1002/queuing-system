@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {IconCircle, IconSquarePlus} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
-import {Flex, TableProps, Typography} from "antd";
+import {Flex, Form, TableProps, Typography} from "antd";
 import Table from "@shared/components/Table";
 import {Link} from "react-router-dom";
 import ActionButton from "src/shared/components/ActionButton";
 import Select from "@shared/components/Select";
 import Input from "@shared/components/Input";
-import DateRangePicker from "@shared/components/DateRangePicker";
 import ButtonLink from "@shared/components/ButtonLink";
 import {useSingleAsync} from "@shared/hook/useAsync";
 import {getServices} from "@modules/services/repository";
 import Breadcrumb from "@shared/components/Breadcrumb";
 import {Service} from "@modules/services/interface";
+import RangePicker from "@shared/components/RangePicker";
+import dayjs, {Dayjs} from "dayjs";
 
 const columns: TableProps<Service>['columns'] = [
     {
@@ -50,8 +51,8 @@ const columns: TableProps<Service>['columns'] = [
         title: '',
         key: 'detail',
         render: (_, record) => (
-            <Link to={`/dich-vu/chi-tiet/${record.code}`}>
-                <ButtonLink >
+            <Link to={`/admin/dich-vu/${record.code}`}>
+                <ButtonLink>
                     Chi tiết
                 </ButtonLink>
             </Link>),
@@ -60,7 +61,7 @@ const columns: TableProps<Service>['columns'] = [
         title: '',
         key: 'update',
         render: (_, record) => (
-            <Link to={`/dich-vu/cap-nhat/${record.code}`}>
+            <Link to={`/admin/dich-vu/${record.code}/cap-nhat`}>
                 <ButtonLink>
                     Cập nhật
                 </ButtonLink>
@@ -69,16 +70,37 @@ const columns: TableProps<Service>['columns'] = [
     },
 ];
 
+type Filters = {
+    status: string;
+}
+
 const ServicePage = () => {
     const [services, setServices] = useState<Service[]>([]);
-    const [startDate, setStartDate] = useState<Date | undefined>();
-    const [endDate, setEndDate] = useState<Date | undefined>(new Date());
+    const [filters, setFilters] = useState<Filters>({status: 'ALL'});
+
+    const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().startOf('month'));
+    const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
+
+    const handleDateChange = (start: Dayjs | null, end: Dayjs | null) => {
+        setStartDate(start);
+        setEndDate(end);
+    };
 
     const loadServices = useSingleAsync(getServices);
 
     useEffect(() => {
         loadServices.execute().then(setServices).catch(() => setServices([]));
     }, []);
+
+    useEffect(() => {
+        const {status} = filters;
+        const statusFilter = status !== 'ALL' ? status : undefined;
+        loadServices.execute(statusFilter).then(setServices).catch(() => setServices([]));
+    }, [filters]);
+
+    const onFiltersChange = (_changedValues: any, allValues: Filters) => {
+        setFilters(allValues);
+    };
 
     return (
         <div>
@@ -99,42 +121,36 @@ const ServicePage = () => {
             <div style={{paddingLeft: '2.4rem', paddingRight: '10.4rem'}}>
                 <Typography.Title level={3} style={{color: '#FF7506', marginBottom: '1.6rem'}}>Danh sách dịch
                     vụ</Typography.Title>
-                <Flex style={{marginBottom: '1.6rem'}} justify="space-between">
-                    <Flex gap="middle">
-                        <Flex vertical gap={4}>
-                            <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}} htmlFor="status">Trạng
-                                thái hoạt động</label>
-                            <Select id="status"
-                                    style={{width: '30rem'}}
-                                    defaultValue="all"
-                                    options={[
-                                        {value: 'all', label: 'Tất cả'},
-                                        {value: '1', label: 'Hoạt động'},
-                                        {value: '2', label: 'Ngưng hoạt động'}
-                                    ]}
-                            />
+                <Form layout="vertical" initialValues={filters} onValuesChange={onFiltersChange}>
+                    <Flex justify="space-between">
+                        <Flex gap="middle">
+                            <Form.Item label="Trạng thái hoạt động" name="status">
+                                <Select id="status"
+                                        style={{width: '30rem'}}
+                                        options={[
+                                            {value: 'ALL', label: 'Tất cả'},
+                                            {value: 'ACTIVE', label: 'Hoạt động'},
+                                            {value: 'INACTIVE', label: 'Ngưng hoạt động'}
+                                        ]}
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Chọn thời gian" name="datePicker">
+                                <RangePicker start={startDate} end={endDate} onChange={handleDateChange}/>
+                            </Form.Item>
                         </Flex>
 
-                        <Flex vertical gap={4}>
-                            <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}}
-                                   htmlFor="connected">Chọn thời gian</label>
-                            <DateRangePicker onChangeStartDate={(date) => setStartDate(date)} endDate={endDate}
-                                             startDate={startDate}
-                                             onChangeEndDate={(date) => setEndDate(date)}/>
-                        </Flex>
+                        <Form.Item label="Từ khóa" name="search">
+                            <Input style={{width: '30rem'}} id="search" placeholder="Nhập từ khóa"/>
+                        </Form.Item>
                     </Flex>
-
-                    <Flex vertical gap={4}>
-                        <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}} htmlFor="search">Từ
-                            khóa</label>
-                        <Input style={{width: '30rem'}} id="search" placeholder="Nhập từ khóa"/>
-                    </Flex>
-                </Flex>
-                <Table bordered columns={columns} dataSource={services}/>;
+                </Form>
+                <Table bordered columns={columns} dataSource={services} rowKey={record => record.id}/>;
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconSquarePlus/>} href="/dich-vu/them-moi">Thêm<br/> dịch vụ</ActionButton.Item>
+                <ActionButton.Item icon={<IconSquarePlus/>} href="/admin/dich-vu/them-moi">Thêm<br/> dịch
+                    vụ</ActionButton.Item>
             </ActionButton>
         </div>
     );

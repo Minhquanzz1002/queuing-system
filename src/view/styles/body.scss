@@ -136,6 +136,12 @@ button {
   font-weight: 600;
 }
 
+.ant-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
 //---------------------------
 //      UTILS           |
 //---------------------------
@@ -145,6 +151,10 @@ button {
 
 .h-100vh {
   height: 100vh;
+}
+
+.w-100 {
+  width: 100%;
 }
 
 .bg-orange-50 {

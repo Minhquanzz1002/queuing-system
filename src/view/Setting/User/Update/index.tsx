@@ -1,32 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Flex, Form, message, Spin, Typography} from "antd";
 import TopBar from "@shared/components/TopBar";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import Breadcrumb from "@shared/components/Breadcrumb";
-import {Device} from "@modules/devices/interface";
 import {useSingleAsync} from "@shared/hook/useAsync";
-import {updateDevice} from "@modules/devices/repository";
 import NotFound from "@shared/components/NotFound";
 import FormUser from "@view/Setting/User/components/FormUser";
-import {getUserByUsername} from "@modules/users/repository";
+import {getUserByUsername, updateUser} from "@modules/users/repository";
 import {User} from "@modules/users/interface";
 
 const UserUpdatePage = () => {
     const [form] = Form.useForm();
+    const navigate = useNavigate();
     const {username} = useParams<{ username: string }>();
     const [user, setUser] = useState<User | null>(null);
     const loadUser = useSingleAsync(getUserByUsername);
-    const updateDeviceCall = useSingleAsync(updateDevice);
+    const updateUserCall = useSingleAsync(updateUser);
 
     useEffect(() => {
         if (username) {
             loadUser.execute(username).then(setUser).catch(() => setUser(null));
         }
     }, [username]);
-
-    useEffect(() => {
-        console.log(user);
-    }, [user]);
 
     if (loadUser.status === "loading") {
         return (
@@ -40,10 +35,11 @@ const UserUpdatePage = () => {
         return <NotFound/>;
     }
 
-    const handleSubmitUpdate = (values: Omit<Device, 'id'>) => {
+    const handleSubmitUpdate = (values: Omit<User, 'id'> & {role: string}) => {
         try {
-            updateDeviceCall.execute(user.id, values);
-            message.success("Cập nhật thiết bị thành công", 5);
+            updateUserCall.execute(user.id, values);
+            message.success("Cập nhật tài khoản thành công", 5);
+            navigate("/admin/cai-dat/quan-ly-tai-khoan");
         } catch (error) {
             console.error(error);
             message.error('Đã có lỗi xảy ra. Hãy thử lại sau', 5);
@@ -60,7 +56,7 @@ const UserUpdatePage = () => {
                         },
                         {
                             title: 'Quản lý tài khoản',
-                            href: '/cai-dat/quan-ly-tai-khoan'
+                            href: '/admin/cai-dat/quan-ly-tai-khoan'
                         },
                         {
                             title: 'Cập nhật tài khoản'
@@ -76,15 +72,15 @@ const UserUpdatePage = () => {
                     form={form}
                     onFinish={handleSubmitUpdate}
                     layout="vertical"
-                    initialValues={{...user, repeatPassword: user.password, role: user.role.name}}
+                    initialValues={{...user, repeatPassword: user.password, role: user.role.id}}
                 >
                     <FormUser/>
 
                     <Flex justify="center" gap="large">
-                        <Link to="/cai-dat/quan-ly-tai-khoan"><Button style={{backgroundColor: '#FFF2E7'}}
-                                                                    htmlType="button"
-                                                                    type="primary"
-                                                                    size="large" ghost>Hủy bỏ</Button></Link>
+                        <Link to="/admin/cai-dat/quan-ly-tai-khoan"><Button style={{backgroundColor: '#FFF2E7'}}
+                                                                      htmlType="button"
+                                                                      type="primary"
+                                                                      size="large" ghost>Hủy bỏ</Button></Link>
                         <Button htmlType="submit" type="primary" size="large">Cập nhật</Button>
                     </Flex>
                 </Form>
