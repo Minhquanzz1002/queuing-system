@@ -1,0 +1,36 @@
+@import "../../../view/styles/variable";
+.kiosk-setting {
+  font-family: Nunito, sans-serif;
+  background: #F6F6F6;
+  min-height: 100vh;
+
+  &__header {
+    padding: 3.2rem 4rem 2.8rem 4.8rem;
+  }
+
+  &__logo {
+    width: 6rem;
+    height: 4.8rem;
+    object-fit: cover;
+  }
+
+  &__content {
+    margin-right: 12rem;
+    margin-left: 8rem;
+    background: white;
+    padding: 2.4rem 4rem;
+    min-height: 50rem;
+    border-radius: 1.6rem;
+    box-shadow: 2px 2px 8px 0 rgba(232, 239, 244, 0.80);
+  }
+
+  &__form-label {
+    font: {
+      size: 2rem;
+      weight: 700;
+    };
+    line-height: 3rem;
+    color: $gray500;
+    text-align: start;
+  }
+}

@@ -1,0 +1,103 @@
+@import "../../../../view/styles/variable";
+
+.report-table {
+  &__header {
+    position: relative;
+
+    &-filter {
+      min-height: 10rem;
+      max-height: 20rem;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0.8rem 0;
+      z-index: 10;
+      position: absolute;
+      right: 0;
+      left: 0;
+      top: 140%;
+      border-radius: 0.8rem;
+      background: white;
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      font: {
+        size: 1.4rem;
+        weight: 400;
+      };
+      line-height: 2.1rem;
+      color: $gray500;
+      scrollbar-width: auto !important;
+      scrollbar-color: auto !important;
+
+      &::-webkit-scrollbar-button {
+        display: none;
+      }
+
+      &::-webkit-scrollbar {
+        width: 0.4rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: white;
+        margin-right: 0.4rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $orange200;
+        border-radius: 0.2rem;
+      }
+
+      &-button {
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.004);
+        }
+      }
+
+      &-content {
+        border: 0;
+        .ant-menu-item {
+          margin: 0;
+          color: $gray500;
+          font: {
+            size: 1.4rem !important;
+            weight: 400 !important;
+          };
+          line-height: 2.1rem;
+
+          &-selected {
+            color: $gray500;
+            background: $orange50;
+          }
+
+          &-active {
+            color: $gray500 !important;
+            background: $orange50 !important;
+          }
+        }
+      }
+
+      &-checkbox {
+        &-item {
+          height: 4rem;
+
+          label {
+            padding: 1rem 1.6rem 1rem 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: $gray500;
+            font: {
+              size: 1.4rem;
+              weight: 400;
+            };
+            line-height: 2.1rem;
+          }
+        }
+      }
+    }
+  }
+
+}

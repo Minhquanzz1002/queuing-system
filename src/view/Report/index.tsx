@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {IconCircle, IconDocumentDownload} from "@assets/icons";
+import {IconDocumentDownload} from "@assets/icons";
 import TopBar from "@shared/components/TopBar";
-import {Flex, TableProps} from "antd";
-import Table from "@shared/components/Table";
+import {Flex, Form} from "antd";
 import ActionButton from "src/shared/components/ActionButton";
 import Breadcrumb from "@shared/components/Breadcrumb";
 import {Queue} from "@modules/queue/interface";
@@ -10,52 +9,25 @@ import dayjs, {Dayjs} from "dayjs";
 import {useSingleAsync} from "@shared/hook/useAsync";
 import {getQueues} from "@modules/queue/repository";
 import RangePicker from "@shared/components/RangePicker";
+import ReportTable from "@view/Report/components/ReportTable";
+import {exportToExcel} from "@shared/utils/exportToExcel";
 
-const columns: TableProps<Queue>['columns'] = [
-    {
-        title: 'Số thứ tự',
-        dataIndex: 'serialNumber',
-        key: 'report_serialNumber',
-    },
-    {
-        title: 'Tên dịch vụ',
-        dataIndex: 'service',
-        key: 'report_service',
-        render: (service) => service.name,
-    },
-    {
-        title: 'Thời gian cấp',
-        dataIndex: 'issueTime',
-        key: 'report_issueTime',
-        render: (issueTime) => dayjs(issueTime).format('HH:mm - DD/MM/YYYY'),
-    },
-    {
-        title: 'Trạng thái',
-        key: 'report_status',
-        dataIndex: 'status',
-        render: (status) => (
-            <>
-                {
-                    status === 'USED' ? (
-                        <Flex gap="small"><IconCircle style={{color: '#7E7D88'}}/>Đã sử dụng</Flex>
-                    ) : status === 'WAITING' ? (
-                        <Flex gap="small"><IconCircle style={{color: '#4277FF'}}/>Đang chờ</Flex>
-                    ) : (
-                        <Flex gap="small"><IconCircle style={{color: '#E73F3F'}}/>Bỏ qua</Flex>
-                    )
-                }
-            </>
-        ),
-    },
-    {
-        title: 'Nguồn cấp',
-        dataIndex: 'issueSource',
-        key: 'report_issueSource',
-    },
-];
+interface QueueReport {
+    id: string;
+    serialNumber: string;
+    customerName: string;
+    customerPhone: string;
+    customerEmail?: string;
+    service: string;
+    issueTime: Date;
+    expiryDate: Date;
+    status: 'USED' | 'WAITING' | 'SKIPPED';
+    issueSource: string;
+}
 
 const ReportPage = () => {
     const [queues, setQueues] = useState<Queue[]>([]);
+    const [filteredQueues, setFilteredQueues] = useState<Queue[]>([]);
     const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().startOf('month'));
     const [endDate, setEndDate] = useState<Dayjs | null>(dayjs());
 
@@ -68,6 +40,21 @@ const ReportPage = () => {
     const handleDateChange = (start: Dayjs | null, end: Dayjs | null) => {
         setStartDate(start);
         setEndDate(end);
+    };
+
+    const handleExport = () => {
+        exportToExcel<QueueReport>(filteredQueues.map(queue => ({
+            id: queue.id,
+            serialNumber: queue.serialNumber,
+            customerName: queue.customer.name,
+            customerPhone: queue.customer.phone,
+            customerEmail: queue.customer.email,
+            service: queue.service.name,
+            issueTime: queue.issueTime,
+            expiryDate: queue.expiryDate,
+            status: queue.status,
+            issueSource: queue.issueSource,
+        })));
     };
 
     return (
@@ -87,18 +74,18 @@ const ReportPage = () => {
             </Flex>
 
             <div style={{paddingLeft: '2.4rem', paddingRight: '10.4rem'}}>
-                <Flex style={{marginBottom: '1.6rem'}}>
-                    <Flex vertical gap={4}>
-                        <label style={{fontSize: '1.6rem', fontWeight: 600, lineHeight: '2.4rem'}}
-                               htmlFor="connected">Chọn thời gian</label>
-                        <RangePicker start={startDate} end={endDate} onChange={handleDateChange}/>
+                <Form layout="vertical">
+                    <Flex>
+                        <Form.Item label="Chọn thời gian">
+                            <RangePicker start={startDate} end={endDate} onChange={handleDateChange}/>
+                        </Form.Item>
                     </Flex>
-                </Flex>
-                <Table bordered columns={columns} dataSource={queues} rowKey={record => record.id}/>;
+                </Form>
+                <ReportTable queues={queues} setFilteredQueues={setFilteredQueues}/>
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconDocumentDownload/>}>Tải về</ActionButton.Item>
+                <ActionButton.Item icon={<IconDocumentDownload/>} onClick={handleExport}>Tải về</ActionButton.Item>
             </ActionButton>
         </div>
     );

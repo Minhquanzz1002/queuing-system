@@ -139,7 +139,7 @@ const UserManagementSettingPage = () => {
                         </Flex>
                     </Flex>
                 </Form>
-                <Table bordered columns={columns} dataSource={users} rowKey={record => record.id}/>;
+                <Table bordered columns={columns} dataSource={users} rowKey={record => record.id}/>
             </div>
 
             <ActionButton>

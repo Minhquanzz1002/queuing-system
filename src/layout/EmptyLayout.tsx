@@ -1,11 +1,12 @@
 import React from 'react';
 import {Outlet} from 'react-router-dom';
+import {Content} from "antd/es/layout/layout";
 
 const EmptyLayout: React.FC = () => {
     return (
-        <div>
+        <Content style={{background: '#F6F6F6', minHeight: '100vh'}}>
             <Outlet/>
-        </div>
+        </Content>
     );
 };
 

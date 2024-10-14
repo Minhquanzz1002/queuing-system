@@ -145,7 +145,7 @@ const ServicePage = () => {
                         </Form.Item>
                     </Flex>
                 </Form>
-                <Table bordered columns={columns} dataSource={services} rowKey={record => record.id}/>;
+                <Table bordered columns={columns} dataSource={services} rowKey={record => record.id}/>
             </div>
 
             <ActionButton>

@@ -23,7 +23,7 @@ const ModalAddQueue = ({isShow, setIsShow, service, textOk = "In số", source =
     const [queue, setQueue] = React.useState<Queue | null>(null);
 
 
-    const handleSubmitForm = (values: any) => {
+    const handleSubmitForm = async (values: any) => {
         if (service) {
             const customer = {
                 name: values.name,
@@ -31,7 +31,7 @@ const ModalAddQueue = ({isShow, setIsShow, service, textOk = "In số", source =
                 ...(values.email && {email: values.email})
             };
 
-            addQueueCall.execute({
+            await addQueueCall.execute({
                 customer,
                 service: service,
                 issueSource: source

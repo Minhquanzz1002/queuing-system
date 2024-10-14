@@ -1,0 +1,72 @@
+.card-counter-info {
+  border-radius: 1.2rem;
+  background: white;
+  overflow: hidden;
+  box-shadow: 2px 2px 8px 0 rgba(232, 239, 244, 0.80);
+
+  &__content {
+    background: white;
+    min-height: 1.96rem;
+    padding: 2rem 1.2rem;
+    gap: 1.2rem;
+    font: {
+      size: 3rem;
+      weight: 700;
+    };
+    line-height: 4.5rem;
+
+
+    &--blue {
+      color: #4277FF;
+    }
+
+    &--orange {
+      color: #FFAC6A;
+    }
+
+    &-text {
+      text-align: center;
+    }
+  }
+
+  &__wrap-icon {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+
+    svg {
+      z-index: 1;
+      opacity: 1;
+    }
+
+    &--blue {
+      color: #4277FF;
+      background: rgba(66, 119, 255, 0.15);
+    }
+
+    &--orange {
+      color: #FFAC6A;
+      background: rgba(255, 172, 106, 0.15);
+    }
+  }
+
+  &__footer {
+    padding: 1.2rem 0.8rem;
+    font: {
+      size: 2rem;
+      weight: 700;
+      family: "Nunito";
+    };
+    text-align: center;
+    line-height: 3rem;
+    color: #F6F6F6;
+
+    &--blue {
+      background: #4277FF;
+    }
+
+    &--orange {
+      background: #FFAC6A;
+    }
+  }
+}

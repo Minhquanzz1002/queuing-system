@@ -33,7 +33,7 @@ const columns: TableProps<Role>['columns'] = [
         title: '',
         key: 'role_update',
         render: (_, record) => (
-            <Link to={`/admin/cai-dat/quan-ly-vai-tro/${record.code}/cap-nhat`}>
+            <Link to={`/admin/cai-dat/quan-ly-vai-tro/${record.id}/cap-nhat`}>
                 <ButtonLink>
                     Cập nhật
                 </ButtonLink>
@@ -100,7 +100,7 @@ const RolePage = () => {
                         </Form.Item>
                     </Flex>
                 </Form>
-                <Table bordered columns={columns} dataSource={filteredRoles} rowKey={(record) => record.id}/>;
+                <Table bordered columns={columns} dataSource={filteredRoles} rowKey={(record) => record.id}/>
             </div>
 
             <ActionButton>

@@ -25,6 +25,7 @@
   }
 
   &__right {
+    background: white;
     width: 84.8rem;
 
     @include for-size(md, down) {

@@ -3,5 +3,6 @@ import React from "react";
 
 export const profileRouter : IRouter = {
     path: "ho-so",
-    loader: React.lazy(() => import('./index'))
+    loader: React.lazy(() => import('./index')),
+    isPrivate: true,
 };

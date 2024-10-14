@@ -12,10 +12,9 @@ const DeviceAddPage = () => {
     const navigate = useNavigate();
     const addDeviceCall = useSingleAsync(addDevice);
 
-    const handleSubmit = (values: any) => {
-        console.log(values);
+    const handleSubmit = async (values: any) => {
         try {
-            addDeviceCall.execute({
+            await addDeviceCall.execute({
                 code: values.code,
                 type: values.type,
                 status: 'INACTIVE',
