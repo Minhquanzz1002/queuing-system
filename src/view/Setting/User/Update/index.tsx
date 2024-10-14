@@ -35,9 +35,9 @@ const UserUpdatePage = () => {
         return <NotFound/>;
     }
 
-    const handleSubmitUpdate = (values: Omit<User, 'id'> & {role: string}) => {
+    const handleSubmitUpdate = async (values: Omit<User, 'id'> & {role: string}) => {
         try {
-            updateUserCall.execute(user.id, values);
+            await updateUserCall.execute(user.id, values);
             message.success("Cập nhật tài khoản thành công", 5);
             navigate("/admin/cai-dat/quan-ly-tai-khoan");
         } catch (error) {

@@ -3,5 +3,6 @@ import React from "react";
 
 export const deviceDetailRouter : IRouter = {
     path: "thiet-bi/:code",
-    loader: React.lazy(() => import('./index'))
+    loader: React.lazy(() => import('./index')),
+    isPrivate: true,
 };

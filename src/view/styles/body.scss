@@ -1,5 +1,4 @@
 @import "variable";
-@import "./layout-admin-style/styles-index";
 //---------------------------
 //      RESET CSS           |
 //---------------------------
@@ -89,9 +88,34 @@ button {
   font-weight: 900;
   src: local("Nunito"), url("../../shared/assets/font/Nunito/Nunito-Black.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local("Open Sans"), url("../../shared/assets/font/OpenSans/OpenSans-SemiBold.ttf") format("truetype");
+}
+
 //---------------------------
 //      CUSTOM ANTD          |
 //---------------------------
+/* Select multiple */
+.ant-select-multiple {
+  .ant-select-selector {
+    border: 0.15rem solid $orange300 !important;
+    .ant-select-selection-overflow {
+      column-gap: 1rem;
+      .ant-select-selection-item {
+        background: $orange300 !important;
+        color: white !important;
+        .ant-select-selection-item-remove {
+            color: white !important;
+        }
+      }
+    }
+  }
+}
+
 /* Menu */
 .ant-menu-item, .ant-menu-submenu-title {
   font-size: 1.6rem !important;
@@ -114,11 +138,11 @@ button {
 }
 
 /* Form */
-.ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+.ant-form-item .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
   display: none;
 }
 
-.ant-form-item .ant-form-item-label >label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
+.ant-form-item .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
   display: inline-block;
   margin-inline-end: 4px;
   color: #ff4d4f;
@@ -128,7 +152,7 @@ button {
   content: "*";
 }
 
-.ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-form-item-label >label::after, :where(.css-dev-only-do-not-override-1l9851f).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-24.ant-form-item-label >label::after, :where(.css-dev-only-do-not-override-1l9851f).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-xl-24.ant-form-item-label >label::after {
+.ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-form-item-label > label::after, :where(.css-dev-only-do-not-override-1l9851f).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-24.ant-form-item-label > label::after, :where(.css-dev-only-do-not-override-1l9851f).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-col-xl-24.ant-form-item-label > label::after {
   visibility: visible;
 }
 
@@ -163,4 +187,19 @@ button {
 
 .text-nowrap {
   text-wrap: nowrap;
+}
+
+.checkbox {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.4rem;
+  background: white;
+  border: 0.15rem solid #4277FF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-checked {
+  background: #4277FF;
 }

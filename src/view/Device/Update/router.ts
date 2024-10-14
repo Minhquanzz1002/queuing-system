@@ -3,5 +3,6 @@ import React from "react";
 
 export const deviceUpdateRouter : IRouter = {
     path: "thiet-bi/:code/cap-nhat",
-    loader: React.lazy(() => import('./index'))
+    loader: React.lazy(() => import('./index')),
+    isPrivate: true,
 };

@@ -2,18 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {Flex, Layout, Menu, MenuProps} from "antd";
 import Sider from "antd/es/layout/Sider";
 import {logo} from "@assets/images";
-import {
-    IconChat,
-    IconDocumentReport,
-    IconElement,
-    IconLayer,
-    IconLogOut,
-    IconMonitor,
-    IconSetting
-} from "@assets/icons";
+import {IconChat, IconDocumentReport, IconElement, IconLayer, IconMonitor, IconSetting} from "@assets/icons";
 import {MoreOutlined} from "@ant-design/icons";
 import {Content} from "antd/es/layout/layout";
-import {Link, Outlet, useLocation} from "react-router-dom";
+import {Link, Outlet, useLocation, useNavigate} from "react-router-dom";
+import store from "@core/store/redux";
+import profileStore from "@modules/authentication/profileStore";
+import ButtonLogout from "@shared/components/ButtonLogout";
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -47,17 +42,24 @@ const siderStyle: React.CSSProperties = {
 };
 
 const contentStyle: React.CSSProperties = {
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: '#F6F6F6'
 };
 
 const AdminLayout: React.FC = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
     useEffect(() => {
         const pathSnippets = location.pathname.split('/').filter(i => i);
         setSelectedKeys(['/' + pathSnippets[1]]);
     }, [location]);
+
+    const logout = () => {
+        store.dispatch(profileStore.actions.logout());
+        navigate('/auth/login');
+    };
 
     return (
         <Layout style={{minHeight: '100vh'}}>
@@ -71,10 +73,7 @@ const AdminLayout: React.FC = () => {
                               expandIcon={<MoreOutlined/>} items={items}/>
                     </div>
                     <div style={{marginBottom: '3.2rem', paddingInline: '1.2rem'}}>
-                        <button className="sidebar__btn-logout">
-                            <IconLogOut/>
-                            <span>Đăng xuất</span>
-                        </button>
+                        <ButtonLogout logout={logout}/>
                     </div>
                 </Flex>
 

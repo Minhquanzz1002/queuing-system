@@ -55,15 +55,10 @@ export const addService = async (service: Omit<Service, 'id'>) => {
     }
 };
 
-export const updateService = async (id: string, updatedData: Partial<Omit<Service, 'id' | 'status'>> & {services: string[]}) => {
+export const updateService = async (id: string, updatedData: Partial<Omit<Service, 'id' | 'status'>>) => {
     try {
-        const deviceDocRef = doc(db, 'devices', id);
-        if (updatedData.services) {
-            const updateServices = updatedData.services.map(serviceId => doc(db, 'services', serviceId));
-            await updateDoc(deviceDocRef, {...updatedData, services: updateServices});
-        } else {
-            await updateDoc(deviceDocRef, updatedData);
-        }
+        const serviceRef = doc(servicesRef, id);
+        await updateDoc(serviceRef, updatedData);
         console.log('Service updated successfully');
     } catch (error) {
         console.error('Error updating service: ', error);

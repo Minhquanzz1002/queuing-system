@@ -2,17 +2,20 @@ import React from 'react';
 import "./styles.scss";
 import {loginBg, logo} from "@assets/images";
 import {Button, Flex, Form, Input} from "antd";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ILoginDTO} from "@modules/authentication/interface";
 import {useSingleAsync} from "@shared/hook/useAsync";
-import {login} from "@modules/authentication/repository";
+import authenticationPresenter from "@modules/authentication/presenter";
 
 const Login = () => {
     const [form] = Form.useForm();
+    const navigate = useNavigate();
+    const {login} = authenticationPresenter;
     const loginCall = useSingleAsync(login);
 
     const handleLogin = (values: ILoginDTO) => {
-        loginCall.execute(values).then(res => console.log(res));
+        loginCall.execute(values)
+            .then(() => navigate('/admin/ho-so'));
     };
 
     return (
@@ -48,7 +51,6 @@ const Login = () => {
                     >
                         <Input.Password size="large" placeholder="Mật khẩu"/>
                     </Form.Item>
-
 
 
                     <Form.Item style={{marginBottom: 0}}>

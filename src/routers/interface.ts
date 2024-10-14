@@ -9,4 +9,5 @@ export type IRouter = {
         | React.LazyExoticComponent<React.FC<any>>
         | React.LazyExoticComponent<React.NamedExoticComponent<any>>;
     exact?: boolean;
+    isPrivate?: boolean;
 }

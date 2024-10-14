@@ -18,9 +18,9 @@ const DeviceUpdatePage = () => {
     const loadDevice = useSingleAsync(getDeviceByCode);
     const updateDeviceCall = useSingleAsync(updateDevice);
 
-    const handleSubmitUpdate = (values: Omit<Device, 'id' | 'status' | 'connected'>) => {
+    const handleSubmitUpdate = async (values: Omit<Device, 'id' | 'status' | 'connected'>) => {
         try {
-            updateDeviceCall.execute(device?.id, values);
+            await updateDeviceCall.execute(device?.id, values);
             message.success("Cập nhật thiết bị thành công", 5);
             navigate("/admin/thiet-bi");
         } catch (error) {

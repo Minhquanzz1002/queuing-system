@@ -3,5 +3,6 @@ import React from "react";
 
 export const serviceRouter : IRouter = {
     path: "dich-vu",
-    loader: React.lazy(() => import('./index'))
+    loader: React.lazy(() => import('./index')),
+    isPrivate: true,
 };

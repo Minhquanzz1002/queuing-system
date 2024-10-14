@@ -12,9 +12,9 @@ const UserAddPage = () => {
     const navigate = useNavigate();
     const addUserCall = useSingleAsync(addUser);
 
-    const handleSubmit = (values: any) => {
+    const handleSubmit = async (values: any) => {
         try {
-            addUserCall.execute({
+            await addUserCall.execute({
                 name: values.name,
                 username: values.username,
                 phone: values.phone,

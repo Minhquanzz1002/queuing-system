@@ -14,8 +14,7 @@ import {
 import Calendar from "@view/Dashboard/components/Calendar";
 import StatusCard from "@view/Dashboard/components/StatusCard";
 import {Link} from "react-router-dom";
-import AreaChartStatistics from "@view/Dashboard/components/AreaChartStatistics";
-import Card from "@shared/components/Card";
+import CardChart from "@view/Dashboard/components/CardChart";
 
 const Dashboard = () => {
     return (
@@ -77,11 +76,7 @@ const Dashboard = () => {
                             />
                         </Col>
                     </Row>
-                    <Card style={{borderRadius: '1.2rem'}}>
-                        <div style={{position: 'absolute', inset: 0, paddingTop: '50px'}}>
-                            <AreaChartStatistics/>
-                        </div>
-                    </Card>
+                    <CardChart/>
                 </Flex>
             </Col>
             <Col flex="40rem" style={{background: 'white', borderRadius: '8px 0 0 8px', minHeight: '100vh'}}>
@@ -92,7 +87,7 @@ const Dashboard = () => {
                       style={{paddingInline: '2.4rem', paddingTop: '1.6rem', paddingBottom: '1.6rem'}}>
                     <Typography.Title level={3}>Tổng quan</Typography.Title>
                     <Flex vertical gap="1.2rem">
-                        <Link to="/thiet-bi">
+                        <Link to="/admin/thiet-bi">
                             <StatusCard icon={<IconMonitor height={14} width={14}/>}
                                         datasets={{
                                             title: "Thiết bị",
@@ -102,7 +97,7 @@ const Dashboard = () => {
                                         }}
                             />
                         </Link>
-                        <Link to="/dich-vu">
+                        <Link to="/admin/dich-vu">
                             <StatusCard icon={<IconChat height={14} width={14}/>}
                                         datasets={{
                                             title: "Dịch vụ",
@@ -112,7 +107,7 @@ const Dashboard = () => {
                                         }}
                             />
                         </Link>
-                        <Link to="/cap-so">
+                        <Link to="/admin/cap-so">
                             <StatusCard icon={<IconLayer height={14} width={14}/>}
                                         datasets={{
                                             title: "Cấp số",
