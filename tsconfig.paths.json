@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
+      "@core/*": ["src/core/*"],
       "@config/*": ["src/config/*"],
       "@view/*": ["src/view/*"],
       "@routers/*": ["src/routers/*"],

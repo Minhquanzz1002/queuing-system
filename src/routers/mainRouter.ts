@@ -22,7 +22,14 @@ import {newQueueNumberRouter} from "@view/Queue/Add/router";
 import {notFoundRouter} from "@view/NotFound/router";
 import {userLogSettingRouter} from "@view/Setting/UserLog/router";
 import {queueDetailRouter} from "@view/Queue/Detail/router";
-import {kioskQueueRouter} from "@view/Kiosk/Queue/router";
+import {kioskQueueRouter} from "@view/QueuePublic/router";
+import {counterRouter} from "@view/Counter/router";
+import {numberingCenterRouter} from "@view/NumberingCenter/router";
+import {kioskRouter} from "@view/Kiosk/router";
+import {counterSettingRouter} from "@view/Counter/Setting/router";
+import {serviceUpdateRouter} from "@view/Service/Update/router";
+import {kioskSettingRouter} from "@view/Kiosk/Setting/router";
+import {numberingCenterSettingRouter} from "@view/NumberingCenter/Setting/router";
 
 export const adminRoutes : IRouter[] = [
     dashboardRouter,
@@ -34,6 +41,7 @@ export const adminRoutes : IRouter[] = [
     serviceRouter,
     serviceAddRouter,
     serviceDetailRouter,
+    serviceUpdateRouter,
     reportRouter,
     queueRouter,
     newQueueNumberRouter,
@@ -52,10 +60,25 @@ export const publicRoutes : IRouter[] = [
     forgotPasswordRouter,
 ];
 
-export const kioskRoutes : IRouter[] = [
-    kioskQueueRouter,
-];
-
 export const otherRoutes : IRouter[] = [
     notFoundRouter
+];
+
+export const counterRoutes : IRouter[] = [
+    counterRouter,
+    counterSettingRouter
+];
+
+export const numberingCenterRoutes : IRouter[] = [
+    numberingCenterRouter,
+    numberingCenterSettingRouter
+];
+
+export const kioskRoutes : IRouter[] = [
+    kioskRouter,
+    kioskSettingRouter
+];
+
+export const queuePublicRoutes : IRouter[] = [
+    kioskQueueRouter
 ];

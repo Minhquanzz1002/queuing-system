@@ -35,15 +35,16 @@ const ActionButtonItem: React.FC<ActionButtonItemProps> = ({children, href, onCl
 
 type ActionButtonProps = {
     children: ReactNode;
+    style?: React.CSSProperties;
 }
 
-const ActionButton : React.FC<ActionButtonProps> & {Item: typeof ActionButtonItem} = ({children}) => {
+const ActionButton : React.FC<ActionButtonProps> & {Item: typeof ActionButtonItem} = ({children, style}) => {
     const items = Children.toArray(children).filter(child =>
         isValidElement(child) && child.type === ActionButtonItem
     );
 
     return (
-        <div className="action-button">
+        <div className="action-button" style={style}>
             {
                 items.map((item, index) => (
                     <React.Fragment key={`action-${index}`}>

@@ -3,5 +3,6 @@ import React from "react";
 
 export const userLogSettingRouter : IRouter = {
     path: "cai-dat/nhat-ky-nguoi-dung",
-    loader: React.lazy(() => import('./index'))
+    loader: React.lazy(() => import('./index')),
+    isPrivate: true,
 };

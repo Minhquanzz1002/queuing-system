@@ -2,6 +2,7 @@ import {IRouter} from "@routers/interface";
 import React from "react";
 import {Route} from "react-router-dom";
 import Loader from "@shared/components/Loader";
+import PrivateRoute from "@routers/component/PrivateRoute";
 
 type IShowRouter = {
     routers: IRouter[];
@@ -9,15 +10,18 @@ type IShowRouter = {
 
 const renderRouter = (router: IRouter) => {
     const DynamicComponent: any = router.loader;
+
+    const element = (
+        <React.Suspense fallback={<Loader/>}>
+            <DynamicComponent/>
+        </React.Suspense>
+    );
+
     return (
         <Route
             key={router.path}
             path={router.path}
-            element={
-                <React.Suspense fallback={<Loader/>}>
-                    <DynamicComponent/>
-                </React.Suspense>
-            }
+            element={router.isPrivate ? <PrivateRoute element={element}/> : element}
         />
     );
 };

@@ -1,32 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Flex, Form, message, Spin, Typography} from "antd";
 import TopBar from "@shared/components/TopBar";
-import Card from "@shared/components/Card";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import Breadcrumb from "@shared/components/Breadcrumb";
-import {Device} from "@modules/devices/interface";
 import {useSingleAsync} from "@shared/hook/useAsync";
-import {updateDevice} from "@modules/devices/repository";
 import NotFound from "@shared/components/NotFound";
-import {getRoleByCode} from "@modules/roles/repository";
+import {getRoleById, updateRole} from "@modules/roles/repository";
 import {Role} from "@modules/roles/interface";
 import FormRole from "@view/Setting/Role/components/FormRole";
 
 const RoleUpdatePage = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
-    const {code} = useParams<{ code: string }>();
+    const {id} = useParams<{ id: string }>();
     const [role, setRole] = useState<Role | null>(null);
-    const loadDevice = useSingleAsync(getRoleByCode);
-    const updateDeviceCall = useSingleAsync(updateDevice);
+    const loadRole = useSingleAsync(getRoleById);
+    const updateRoleCall = useSingleAsync(updateRole);
 
     useEffect(() => {
-        if (code) {
-            loadDevice.execute(code).then(setRole).catch(() => setRole(null));
+        if (id) {
+            loadRole.execute(id).then(setRole).catch(() => setRole(null));
         }
-    }, [code]);
+    }, [id]);
 
-    if (loadDevice.status === "loading") {
+    if (loadRole.status === "loading") {
         return (
             <Flex align="center" justify="center" className="h-100vh">
                 <Spin size="large"/>
@@ -38,15 +35,23 @@ const RoleUpdatePage = () => {
         return <NotFound/>;
     }
 
-    const handleSubmitUpdate = (values: Omit<Device, 'id'>) => {
+    const handleSubmitUpdate = async (values: any) => {
         try {
-            updateDeviceCall.execute(role.id, values);
-            message.success("Cập nhật thiết bị thành công", 5);
+            await updateRoleCall.execute(role.id, {
+                ...values,
+                description: values.description || '',
+            });
+            message.success("Cập nhật vai trò thành công", 5);
             navigate("/admin/cai-dat/quan-ly-vai-tro");
         } catch (error) {
             console.error(error);
             message.error('Đã có lỗi xảy ra. Hãy thử lại sau', 5);
         }
+    };
+
+    const initialValues = {
+        ...role,
+        permissions: role.permissions.map(permission => permission.id)
     };
 
     return (
@@ -71,18 +76,7 @@ const RoleUpdatePage = () => {
 
             <div style={{paddingLeft: '2.4rem', paddingRight: '6.4rem'}}>
                 <Typography.Title level={3} style={{marginBottom: '1.6rem'}}>Danh sách vai trò</Typography.Title>
-                <Form
-                    form={form}
-                    onFinish={handleSubmitUpdate}
-                    layout="vertical"
-                    initialValues={role}
-                >
-                    <Card>
-                        <Typography.Title level={4} style={{marginBottom: '1.6rem'}}>Thông tin vai
-                            trò</Typography.Title>
-                        <FormRole/>
-                    </Card>
-
+                <FormRole form={form} initialValues={initialValues} onFinish={handleSubmitUpdate}>
                     <Flex justify="center" gap="large">
                         <Link to="/admin/cai-dat/quan-ly-vai-tro"><Button style={{backgroundColor: '#FFF2E7'}}
                                                                           htmlType="button"
@@ -90,7 +84,7 @@ const RoleUpdatePage = () => {
                                                                           size="large" ghost>Hủy bỏ</Button></Link>
                         <Button htmlType="submit" type="primary" size="large">Cập nhật</Button>
                     </Flex>
-                </Form>
+                </FormRole>
             </div>
         </div>
     );

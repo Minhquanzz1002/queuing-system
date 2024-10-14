@@ -3,5 +3,6 @@ import React from "react";
 
 export const newQueueNumberRouter : IRouter = {
     path: "cap-so/cap-so-moi",
-    loader: React.lazy(() => import('./index'))
+    loader: React.lazy(() => import('./index')),
+    isPrivate: true,
 };

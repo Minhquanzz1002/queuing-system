@@ -1,16 +1,101 @@
 @import "../../../view/styles/variable";
 
 .topbar {
+  margin-right: 6rem;
+
   &__notification {
     height: 3.2rem;
     width: 3.2rem;
     background-color: $orange50;
     border: none;
     color: $orange300;
+    position: relative;
 
     &:hover {
       color: white !important;
       background-color: $orange500 !important;
+    }
+
+    &-popup {
+      width: 36rem;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 2rem;
+      z-index: 10;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 2px 2px 15px 0 rgba(70, 64, 67, 0.10);
+
+
+      &__title {
+        background: $orange400;
+        padding: 0.9rem 2.4rem;
+        color: white;
+        font: {
+          size: 2rem;
+          weight: 700;
+        };
+        line-height: 3rem;
+      }
+
+      &__content {
+        background: white;
+        overflow-y: auto;
+        max-height: 40rem;
+        min-height: 10rem;
+
+        &::-webkit-scrollbar {
+          width: 0.4rem;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: $orange200;
+          border-radius: 0.2rem;
+        }
+
+        .notification-card {
+          padding: 1.6rem 2.4rem;
+          cursor: pointer;
+
+          &:hover {
+            background: $orange50;
+          }
+
+          &__divider {
+            margin-inline: 2.4rem;
+            height: 1px;
+            background: $gray100;
+          }
+
+          &__user {
+            font: {
+              size: 1.6rem;
+              weight: 700;
+            };
+            line-height: 2.4rem;
+            color: $orange600;
+          }
+
+          &__time {
+            font: {
+              size: 1.6rem;
+              weight: 400;
+            };
+            line-height: 2.4rem;
+            color: $gray400;
+            max-width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+        }
+      }
     }
   }
 
@@ -25,6 +110,10 @@
     };
     line-height: 1.8rem;
     color: $gray300;
+  }
+
+  &__info {
+    min-width: 12rem;
   }
 
   &__username {

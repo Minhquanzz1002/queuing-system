@@ -14,20 +14,19 @@ const ServiceAddPage = () => {
     const navigate = useNavigate();
     const addServiceCall = useSingleAsync(addService);
 
-    const handleSubmit = (values: any) => {
-        console.log(values);
+    const handleSubmit = async (values: any) => {
         try {
-            addServiceCall.execute({
+            await addServiceCall.execute({
                 ...values,
                 description: values.description || '',
                 useFromToNumber: !!values.useFromToNumber,
                 usePrefix: !!values.usePrefix,
                 useSuffix: !!values.useSuffix,
                 isDaily: !!values.isDaily,
-                fromNumber: 1,
-                toNumber: 1,
-                prefix: '',
-                suffix: '',
+                fromNumber: values.fromNumber,
+                toNumber: values.toNumber,
+                prefix: values.prefix,
+                suffix: values.suffix,
             });
 
             message.success("Thêm dịch vụ thành công", 5);
@@ -123,9 +122,13 @@ const ServiceAddPage = () => {
                                 </Col>
                                 <Col flex="auto">
                                     <Flex align="center" gap="middle">
-                                        <Input size="large" style={{width: '6.5rem'}}/>
+                                        <Form.Item name="fromNumber">
+                                            <Input size="large" style={{width: '6.5rem'}}/>
+                                        </Form.Item>
                                         <span>đến</span>
-                                        <Input size="large" style={{width: '6.5rem'}}/>
+                                        <Form.Item name="toNumber">
+                                            <Input size="large" style={{width: '6.5rem'}}/>
+                                        </Form.Item>
                                     </Flex>
                                 </Col>
                             </Row>
@@ -138,7 +141,9 @@ const ServiceAddPage = () => {
                                     </Flex>
                                 </Col>
                                 <Col flex="auto">
-                                    <Input size="large" style={{width: '6.5rem'}}/>
+                                    <Form.Item name="prefix">
+                                        <Input size="large" style={{width: '6.5rem'}}/>
+                                    </Form.Item>
                                 </Col>
                             </Row>
                             <Row>
@@ -150,7 +155,9 @@ const ServiceAddPage = () => {
                                     </Flex>
                                 </Col>
                                 <Col flex="auto">
-                                    <Input size="large" style={{width: '6.5rem'}}/>
+                                    <Form.Item name="suffix">
+                                        <Input size="large" style={{width: '6.5rem'}}/>
+                                    </Form.Item>
                                 </Col>
                             </Row>
                             <Row>

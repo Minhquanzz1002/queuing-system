@@ -11,7 +11,13 @@
 - Webpack
 - React Router DOM
 - Ant Design
+- SCSS
+- Firebase
+- Redux (Redux Toolkit, Redux Persist)
+
+## SITE MAP
+![Site Map](/demo/sitemap.png)
 
 ## INSTRUCTIONS
 
-URL `http://localhost:5173/`
+URL `http://localhost:4545/`
