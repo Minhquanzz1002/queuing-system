@@ -51,10 +51,15 @@ const columns: TableProps<Queue>['columns'] = [
     },
 ];
 
+interface Filters {
+    status: string;
+}
+
 const ServiceDetailPage = () => {
     const {code} = useParams<{ code: string }>();
     const [service, setService] = useState<Service | null>(null);
     const [queues, setQueues] = useState<Queue[]>([]);
+    const [filters, setFilters] = useState<{ status: string }>({status: 'all'});
     const loadService = useSingleAsync(getServiceByCode);
     const loadQueues = useSingleAsync(getQueues);
 
@@ -71,6 +76,19 @@ const ServiceDetailPage = () => {
     useEffect(() => {
         fetchQueues();
     }, [service]);
+
+    useEffect(() => {
+        const {status} = filters;
+        const statusFilter = status === 'ALL' ? undefined : status;
+        loadQueues.execute({
+            status: statusFilter,
+            serviceId: service?.id,
+        }).then(setQueues).catch(() => setQueues([]));
+    }, [filters]);
+
+    const onFiltersChange = (_changedValues: any, allValues: Filters) => {
+        setFilters(allValues);
+    };
 
     if (loadService.status === "loading") {
         return (
@@ -176,7 +194,8 @@ const ServiceDetailPage = () => {
                                     )
                                 }
                                 <div>
-                                    Ví dụ: {`${service.usePrefix ? service.prefix : ''}${service.useFromToNumber ? service.fromNumber : ''}${service.useSuffix ? service.suffix : ''}`}
+                                    Ví
+                                    dụ: {`${service.usePrefix ? service.prefix : ''}${service.useFromToNumber ? service.fromNumber : ''}${service.useSuffix ? service.suffix : ''}`}
                                 </div>
                             </Flex>
                         </Card>
@@ -184,7 +203,8 @@ const ServiceDetailPage = () => {
                     <Col flex={1}>
                         <Card>
                             <Form layout="vertical"
-                                  initialValues={{status: 'all'}}
+                                  onValuesChange={onFiltersChange}
+                                  initialValues={filters}
                             >
                                 <Flex align="center" justify="space-between" wrap>
                                     <Form.Item label="Trạng thái" name="status">
@@ -209,7 +229,8 @@ const ServiceDetailPage = () => {
             </div>
 
             <ActionButton>
-                <ActionButton.Item icon={<IconEditSquare/>} onClick={fetchQueues}>Cập nhật<br/> danh sách</ActionButton.Item>
+                <ActionButton.Item icon={<IconEditSquare/>} onClick={fetchQueues}>Cập nhật<br/> danh
+                    sách</ActionButton.Item>
                 <ActionButton.Item icon={<IconBackSquare/>} href="/admin/dich-vu">Quay lại</ActionButton.Item>
             </ActionButton>
         </div>
