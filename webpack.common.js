@@ -59,7 +59,9 @@ module.exports = {
             chunkFilename: '[id]-[chunkhash].css',
         }),
         new CopyWebpackPlugin({
-            patterns: [{ from: 'src/shared/assets/images', to: 'src/shared/assets/images' }]
+            patterns: [
+                { from: 'src/shared/assets/images', to: 'src/shared/assets/images' },
+            ]
         }),
     ],
     resolve: {

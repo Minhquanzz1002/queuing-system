@@ -42,8 +42,15 @@ const ReportPage = () => {
         setEndDate(end);
     };
 
-    const handleExport = () => {
-        exportToExcel<QueueReport>(filteredQueues.map(queue => ({
+    useEffect(() => {
+        loadQueues.execute({
+            startDate: startDate?.toDate(),
+            endDate: endDate?.toDate()
+        }).then(setQueues).catch(() => setQueues([]));
+    }, [startDate, endDate]);
+
+    const handleExport = async () => {
+        await exportToExcel<QueueReport>(filteredQueues.map(queue => ({
             id: queue.id,
             serialNumber: queue.serialNumber,
             customerName: queue.customer.name,

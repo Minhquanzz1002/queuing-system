@@ -3,6 +3,7 @@ import {Service} from "@modules/services/interface";
 import {db} from "@config/firebaseConfig";
 import {Customer, Queue} from "@modules/queue/interface";
 import dayjs from "dayjs";
+import {addUserLog} from "@modules/userLogs/repository";
 
 const queuesRef = collection(db, 'queues');
 const servicesRef = collection(db, 'services');
@@ -109,6 +110,11 @@ export const addQueue = async (queue: {service: Service, customer: Customer, iss
         if (!newQueueData) {
             throw new Error('Unable to add a queue');
         }
+
+        await addUserLog({
+            action: `Cấp số ${serialNumber}`,
+            ipAddress: '192.168.1.1'
+        });
 
         return {
             id: docRef.id,

@@ -12,6 +12,7 @@ import {
 import {db} from "@config/firebaseConfig";
 import {Role} from "@modules/roles/interface";
 import {Permission} from "@modules/permissions/interface";
+import {addUserLog} from "@modules/userLogs/repository";
 
 
 const rolesRef = collection(db, 'roles');
@@ -68,7 +69,10 @@ export const addRole = async (roleData: Partial<Omit<Role, 'id' | 'permissions'>
             );
 
             transaction.set(roleDocRef, {...roleData, userCount: 0, permissions: permissionRefs});
-
+            await addUserLog({
+                action: `Thêm role ${roleDocRef.id}`,
+                ipAddress: '192.168.1.1'
+            });
             return roleDocRef.id;
         });
     } catch (error) {
@@ -101,6 +105,10 @@ export const updateRole = async (roleId: string, updateData: Partial<Omit<Role, 
             transaction.update(roleDocRef, updatedData);
         });
 
+        await addUserLog({
+            action: `Update role ${roleId}`,
+            ipAddress: '192.168.1.1'
+        });
         console.log("Role updated successfully");
     } catch (error) {
         console.error("Error updating role: ", error);
