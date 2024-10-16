@@ -2,6 +2,7 @@ import {collection, doc, getDoc, getDocs, limit, orderBy, query, where, addDoc, 
 import {db} from "@config/firebaseConfig";
 import {User} from "@modules/users/interface";
 import {Role} from "@modules/roles/interface";
+import {addUserLog} from "@modules/userLogs/repository";
 
 const usersRef = collection(db, 'users');
 const rolesRef = collection(db, 'roles');
@@ -71,6 +72,10 @@ export const addUser = async (user: Omit<User, 'id' | 'role'> & {role: string}) 
             role: doc(rolesRef, user.role),
         };
         const docRef = await addDoc(usersRef, userWithRoleRef);
+        await addUserLog({
+            action: `Tạo tài khoản ${docRef.id}`,
+            ipAddress: '192.168.1.1'
+        });
         return docRef.id;
     } catch (error) {
         console.error('Error adding user: ', error);
@@ -87,6 +92,10 @@ export const updateUser = async (id: string, updatedData: Partial<Omit<User, 'ro
         } else {
             await updateDoc(userDocRef, updatedData);
         }
+        await addUserLog({
+            action: `Update tài khoản ${id}`,
+            ipAddress: '192.168.1.1'
+        });
     } catch (error) {
         console.error('Error updating user: ', error);
         throw new Error("Unable to update the user");

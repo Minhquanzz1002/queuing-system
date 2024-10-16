@@ -163,7 +163,7 @@ const DevicePage = () => {
 
     return (
         <div>
-            <Flex style={{padding: '2.4rem'}} align="center" justify="space-between">
+            <Flex style={{padding: '2.4rem'}} align="center" justify="space-between" wrap="wrap">
                 <Breadcrumb
                     items={[
                         {

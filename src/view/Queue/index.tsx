@@ -168,7 +168,7 @@ const QueuePage = () => {
                             <Select style={{width: '15.5rem'}}
                                     options={[
                                         {key: "STATUS_FILTER_ALL", value: "ALL", label: "Tất cả"},
-                                        {key: "STATUS_FILTER_PENDING", value: "PENDING", label: "Đang chờ"},
+                                        {key: "STATUS_FILTER_PENDING", value: "WAITING", label: "Đang chờ"},
                                         {key: "STATUS_FILTER_USED", value: "USED", label: "Đã sử dụng"},
                                         {key: "STATUS_FILTER_SKIPPED", value: "SKIPPED", label: "Bỏ qua"},
                                     ]}

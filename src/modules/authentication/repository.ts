@@ -3,6 +3,7 @@ import {db} from "@config/firebaseConfig";
 import {User} from "@modules/users/interface";
 import {ILoginDTO} from "@modules/authentication/interface";
 import {Role} from "@modules/roles/interface";
+import {addUserLog} from "@modules/userLogs/repository";
 
 const usersRef = collection(db, 'users');
 const rolesRef = collection(db, 'roles');
@@ -32,6 +33,12 @@ const login = async (payload: ILoginDTO) => {
             role = {id: roleDoc.id, ...roleDoc.data()} as Role;
         }
     }
+
+    await addUserLog({
+        username: payload.username,
+        action: `Đăng nhập vào hệ thống`,
+        ipAddress: '192.168.1.1'
+    });
 
     return {
         id: userDoc.id,
