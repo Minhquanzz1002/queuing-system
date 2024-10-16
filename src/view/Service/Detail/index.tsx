@@ -79,7 +79,7 @@ const ServiceDetailPage = () => {
 
     useEffect(() => {
         const {status} = filters;
-        const statusFilter = status === 'ALL' ? undefined : status;
+        const statusFilter = status === 'all' ? undefined : status;
         loadQueues.execute({
             status: statusFilter,
             serviceId: service?.id,

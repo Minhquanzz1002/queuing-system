@@ -6,6 +6,6 @@ const config = {
     plugins: [new Dotenv({ path: './.env' })],
     devtool: "cheap-module-source-map",
     mode: "production",
-}
+};
 
-module.exports = merge(common, config)
+module.exports = merge(common, config);

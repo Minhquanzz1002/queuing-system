@@ -2,23 +2,25 @@ import {
     addDoc,
     collection,
     doc,
+    getDoc,
     getDocs,
     limit,
     orderBy,
     query,
-    updateDoc,
-    where,
     QueryConstraint,
-    getDoc
+    updateDoc,
+    where
 } from "firebase/firestore";
 import {db} from "@config/firebaseConfig";
 import {Device} from "@modules/devices/interface";
 import {Service} from "@modules/services/interface";
+import {addUserLog} from "@modules/userLogs/repository";
+import store from "@core/store/redux";
 
 const devicesRef = collection(db, 'devices');
 
 export const getDevices = async (status?: "ACTIVE" | "INACTIVE", connected?: boolean): Promise<Device[]> => {
-    const conditions : QueryConstraint[] = [
+    const conditions: QueryConstraint[] = [
         ...(status ? [where('status', '==', status)] : []),
         ...(connected !== undefined ? [where('connected', '==', connected)] : [])
     ];
@@ -38,7 +40,7 @@ export const getDevices = async (status?: "ACTIVE" | "INACTIVE", connected?: boo
             if (typeof serviceData !== 'object') {
                 return null;
             }
-            return { id: serviceDoc.id, ...serviceData } as Service;
+            return {id: serviceDoc.id, ...serviceData} as Service;
         }));
         return {
             id: d.id,
@@ -70,7 +72,7 @@ export const getDeviceByCode = async (code: string): Promise<Device | null> => {
             if (typeof serviceData !== 'object') {
                 return null;
             }
-            return { id: serviceDoc.id, ...serviceData } as Service;
+            return {id: serviceDoc.id, ...serviceData} as Service;
         }));
         return {
             id: doc.id,
@@ -82,13 +84,17 @@ export const getDeviceByCode = async (code: string): Promise<Device | null> => {
     }
 };
 
-export const addDevice = async (device: Omit<Device, 'id' | 'services'> & {services: string[]}) => {
+export const addDevice = async (device: Omit<Device, 'id' | 'services'> & { services: string[] }) => {
     try {
         const deviceData = {
             ...device,
             services: device.services.map(serviceId => doc(db, 'services', serviceId))
         };
         const docRef = await addDoc(devicesRef, deviceData);
+        await addUserLog({
+            action: `Thêm thiết bị thiết bị ${docRef.id}`,
+            ipAddress: '192.168.1.1'
+        });
         return docRef.id;
     } catch (error) {
         console.error('Error adding device: ', error);
@@ -96,7 +102,9 @@ export const addDevice = async (device: Omit<Device, 'id' | 'services'> & {servi
     }
 };
 
-export const updateDevice = async (id: string, updatedData: Partial<Omit<Device, 'id' | 'status' | 'connected' | 'services'>> & {services: string[]}) => {
+export const updateDevice = async (id: string, updatedData: Partial<Omit<Device, 'id' | 'status' | 'connected' | 'services'>> & {
+    services: string[]
+}) => {
     try {
         const deviceDocRef = doc(db, 'devices', id);
         if (updatedData.services) {
@@ -105,6 +113,11 @@ export const updateDevice = async (id: string, updatedData: Partial<Omit<Device,
         } else {
             await updateDoc(deviceDocRef, updatedData);
         }
+
+        await addUserLog({
+            action: `Cập nhật thông tin thiết bị ${id}`,
+            ipAddress: '192.168.1.1'
+        });
         console.log('Device updated successfully');
     } catch (error) {
         console.error('Error updating device: ', error);
